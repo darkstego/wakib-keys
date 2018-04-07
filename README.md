@@ -15,8 +15,8 @@ This is just the start, I hope to expand on it very soon
 
 | Key | Binding |
 | --- | --- |
-| Alt + I/J/K/L | Inverse t movement by Char |
-| Alt+Shift+ I/K | Page up/down |
+| Alt + I/J/K/L | Inverse T movement by Char |
+| Alt+Shift+ I/K | Page Up/Down |
 | Alt+ U/O | Back/Forward Word |
 | Alt+Shift+ U/O | Beginning/End of Line or Paragraph |
 
@@ -70,7 +70,7 @@ in your init.el file
 
 ## Features
 
-Proper CUA editor
+Proper CUA implementation
 
 Moved the common Emacs prefixes to free up key for proper copy-cut shortcuts
 
@@ -95,12 +95,6 @@ Much thanks to the general.el project for providing the solution to
 dynamically bind prefix keys. If you simply want to copy the C-c key
 to another location, while keeping C-c as is, check them out, they provide a
 an easy way of doing it. Or just check out the Macro shown in my mode.
-
-## Warnings
-
-It seems C-x is overwritten on certain occasions due to minor modes actually
-using it (who knew). I will implement the same override for C-x as I did for
-C-c to handle those.
 
 I am very very new to elisp, and emacs so any suggestions or advice is
 greatly appreciated.

@@ -46,14 +46,6 @@ an easy way of doing it. Or just check out the Macro shown in my mode.
 
 ## Warnings
 
-The C-c key doesn't return to normal after you turn of wakib mode. You need
-to run
-```
-(setq wakib-cc-mode nil)
-```
-to get it back. I will bind this the mode-hook on mode disable once I figure
-it out.
-
 It seems C-x is overwritten on certain occasions due to minor modes actually
 using it (who knew). I will implement the same override for C-x as I did for
 C-c to handle those.

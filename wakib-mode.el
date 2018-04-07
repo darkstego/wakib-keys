@@ -103,7 +103,7 @@ It returns the buffer (for elisp programing)."
         keylist))
 
 
-;; Need to update on hook when mode disabled
+;; Remove overrides on mode exit
 (defun wakib-update-cc-override ()
   (setq wakib-cc-mode wakib-mode))
 (add-hook 'wakib-mode-hook 'wakib-update-cc-override)

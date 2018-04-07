@@ -48,6 +48,7 @@ This is just the start, I hope to expand on it very soon
 ### Emacs Prefix Keys
 
 Yes, those have finally moved
+
 | Old Key            | New Key                            |
 | ---            | ---                                |
 | Ctrl + C       | Ctrl + D                        |

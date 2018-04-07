@@ -15,7 +15,7 @@ This is just the start, I hope to expand on it very soon
 
 | Key | Binding |
 | --- | --- |
-| Alt + IJKL | inverse t movemeny by Char |
+| Alt + IJKL | inverse t movement by Char |
 | Alt+Shift+ I/K | Page up/down |
 | Alt+ U/O | Back/Forward Word |
 | Alt+Shift+ U/O | Beginning/End of line or paragraph |

@@ -45,14 +45,15 @@ This is just the start, I hope to expand on it very soon
 | Alt + F4 | Close Emacs |
 
 
-### Emacs Prefix Keys
+### Emacs Keys
 
 Yes, those have finally moved
 
 | Old Key            | New Key                            |
 | ---            | ---                                |
-| Ctrl + C       | Ctrl + D                        |
-| Ctrl + X       | Ctrl + E                           |
+| Ctrl + C (prefix only)      | Ctrl + D                        |
+| Ctrl + X (prefix only)      | Ctrl + E                           |
+| Alt + X  (not overwritten.. yet) | Alt + A  |
 
 
 

@@ -5,6 +5,56 @@ This mode that in my humble opinion is needed to give Emacs some
 modern shortcuts.
 
 
+## Bindings
+
+The tables below show the bindings
+This is just the start, I hope to expand on it very soon
+(I explicitly mention the shift key so don't get thrown off by letter capitalization)
+
+### Movement
+
+| Key | Binding |
+| --- | --- |
+| Alt + IJKL | inverse t movemeny by Char |
+| Alt+Shift+ I/K | Page up/down |
+| Alt+ U/O | Back/Forward Word |
+| Alt+Shift+ U/O | Beginning/End of line or paragraph |
+
+### Editing
+
+| Key | Binding |
+| --- | --- |
+| Alt + E/R | Delete Word Back/Forward |
+| Alt+ D/F | Delete Char Back/Forward |
+| Alt + Space | Set/Stop Mark for Selection |
+
+
+### Cua
+
+| Key            | Binding                            |
+| ---            | ---                                |
+| Ctrl + O       | Open File                          |
+| Ctrl + P       | Print                              |
+| Ctrl + F         | Search                  |
+| Ctrl + W | Close Buffer |
+| Ctrl + S | Save |
+| Ctrl + Z | Undo |
+| Ctrl + X | Cut |
+| Ctrl + C | Copy |
+| Ctrl + V | Paste |
+| Alt + F4 | Close Emacs |
+
+
+### Emacs Prefix Keys
+
+Yes, those have finally moved
+| Old Key            | New Key                            |
+| ---            | ---                                |
+| Ctrl + C       | Ctrl + D                        |
+| Ctrl + X       | Ctrl + E                           |
+
+
+
 ## Installation
 
 Just copy the wakib-mode.el file to the location in your emacs loadpath

@@ -1,9 +1,7 @@
-# wakib-mode
-Emacs mode that moves to modern keybindings
+# Wakib
 
-This mode that in my humble opinion is needed to give Emacs some
-modern shortcuts.
-
+Emacs minor mode that provides a modern, efficient and easy
+to learn keybindings
 
 ## Bindings
 
@@ -59,8 +57,8 @@ Yes, those have finally moved
 
 ## Installation
 
-Just copy the wakib-mode.el file to the location in your emacs loadpath
-and put
+Copy the *wakib-mode.el* file anywhere in your emacs loadpath
+then place
 
 ```
 (require 'wakib-mode)

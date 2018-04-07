@@ -105,9 +105,7 @@ It returns the buffer (for elisp programing)."
 
 ;; Need to update on hook when mode disabled
 (defun wakib-update-cc-override ()
-  (if wakib-mode
-		(setq wakib-cc-mode nil)
-	 (setq wakib-cc-mode 1)))
+  (setq wakib-cc-mode wakib-mode))
 (add-hook 'wakib-mode-hook 'wakib-update-cc-override)
 
 
@@ -174,8 +172,7 @@ just to use their editor.
 Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :lighter " Wakib"
   :keymap wakib-mode-map
-  :init-value t
-  :after-hook (setq wakib-cc-mode 1))
+  :init-value t)
 
 
 (provide 'wakib-mode)

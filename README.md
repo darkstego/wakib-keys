@@ -25,6 +25,7 @@ Moved the common Emacs prefixes to free up key for proper copy-cut shortcuts
 The new prefixes are
 
 C-c => C-d
+
 C-x => C-e
 
 This moves the prefixes to two keys that to my knowledge aren't commonly mapped

@@ -57,7 +57,7 @@ It returns the buffer (for elisp programing)."
   (kill-buffer (current-buffer)))
 
 
-(defun xah-beginning-of-line-or-block ()
+(defun wakib-beginning-of-line-or-block ()
   "Move cursor to beginning of line or previous paragraph.
 • When called first time, move cursor to beginning of char in current line. (if already, move to beginning of line.)
 • When called again, move cursor backward by jumping over any sequence of whitespaces containing 2 blank lines."
@@ -105,7 +105,9 @@ It returns the buffer (for elisp programing)."
 
 ;; Need to update on hook when mode disabled
 (defun wakib-update-cc-override ()
-  (setq wakib-cc-mode wakib-mode))
+  (if wakib-mode
+		(setq wakib-cc-mode nil)
+	 (setq wakib-cc-mode 1)))
 (add-hook 'wakib-mode-hook 'wakib-update-cc-override)
 
 

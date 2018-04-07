@@ -15,10 +15,10 @@ This is just the start, I hope to expand on it very soon
 
 | Key | Binding |
 | --- | --- |
-| Alt + IJKL | inverse t movement by Char |
+| Alt + I/J/K/L | Inverse t movement by Char |
 | Alt+Shift+ I/K | Page up/down |
 | Alt+ U/O | Back/Forward Word |
-| Alt+Shift+ U/O | Beginning/End of line or paragraph |
+| Alt+Shift+ U/O | Beginning/End of Line or Paragraph |
 
 ### Editing
 
@@ -29,7 +29,7 @@ This is just the start, I hope to expand on it very soon
 | Alt + Space | Set/Stop Mark for Selection |
 
 
-### Cua
+### CUA
 
 | Key            | Binding                            |
 | ---            | ---                                |
@@ -90,8 +90,8 @@ using Alt + ijkl keys. I hope to finish up the keybindings soon. This is
 modifier based mode. If you are looking for a modal keybinding in the same
 vein, check out xah-fly-keys.
 
-Much thanks to the general.el project for giving me the solution of
-dynamically binding prefix keys. If you simply want to copy the C-c key
+Much thanks to the general.el project for providing the solution to
+dynamically bind prefix keys. If you simply want to copy the C-c key
 to another location, while keeping C-c as is, check them out, they provide a
 an easy way of doing it. Or just check out the Macro shown in my mode.
 

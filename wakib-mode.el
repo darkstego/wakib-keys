@@ -1,7 +1,7 @@
 ;; Functions & Macros
 
-(cl-defmacro wakib-cc-key ()
-  "Act as C-c definition in the current context.
+(cl-defmacro wakib-cc-key (key)
+  "Act as prefix definition in the current context.
 This uses an extended menu item's capability of dynamically computing a
 definition. This idea came from general.el"
   `'(menu-item
@@ -9,23 +9,23 @@ definition. This idea came from general.el"
      nil
      :filter
      (lambda (&optional _)
-		 ,`(wakib-get-all-keymaps))))
+		 ,`(wakib-get-all-keymaps ,key))))
 
 
-;; use let instead of double call to (car x)
-(defun wakib-minor-cc-keymaps()
+;; should use let instead of double call to (car x)
+(defun wakib-minor-cc-keymaps(key)
   (let ((active-maps nil))
 	 (mapc (lambda (x) 
 				(when (and (symbolp (car x)) (symbol-value (car x)))
-				  (add-to-list 'active-maps  (lookup-key (cdr x) (kbd "C-c")))))
+				  (add-to-list 'active-maps  (lookup-key (cdr x) (kbd key)))))
 			 minor-mode-map-alist )
 	 (make-composed-keymap active-maps)))
 
 
 
 ;; might need to do keymap inheretence to perserve priority
-(defun wakib-get-all-keymaps ()
-  (make-composed-keymap (list (wakib-minor-cc-keymaps) (local-key-binding (kbd "C-c")) (global-key-binding (kbd "C-c")))))
+(defun wakib-get-all-keymaps (key)
+  (make-composed-keymap (list (wakib-minor-cc-keymaps key) (local-key-binding (kbd key)) (global-key-binding (kbd key)))))
 
 
 ;; Commands
@@ -102,22 +102,6 @@ It returns the buffer (for elisp programing)."
           (define-key keymap (kbd (car pair)) (cdr pair)))
         keylist))
 
-
-;; Remove overrides on mode exit
-(defun wakib-update-cc-override ()
-  (setq wakib-cc-mode wakib-mode))
-(add-hook 'wakib-mode-hook 'wakib-update-cc-override)
-
-
-(defvar wakib-cc-mode-map (make-sparse-keymap))
-(define-key wakib-cc-mode-map (kbd "C-c") 'kill-ring-save)
-(defun wakib-cc-override ()
-  "Add modemap to override C-c into minor-mode-overriding-map-alist"
-  (interactive)
-  (add-to-list 'minor-mode-overriding-map-alist (cons 'wakib-cc-mode wakib-cc-mode-map)))
-(add-hook 'after-change-major-mode-hook 'wakib-cc-override)
-
-
 (defvar wakib-keylist
   '(("M-j" . backward-char)
 	 ("M-l" . forward-char)
@@ -133,8 +117,7 @@ It returns the buffer (for elisp programing)."
 	 ("C-o" . find-file)
 	 ("C-w" . wakib-close-current-buffer)
 	 ("C-<next>" . next-buffer)
-	 ("C-<prior>" . previous-buffer) 
-	 ("C-x" . kill-region)
+	 ("C-<prior>" . previous-buffer)
 	 ("C-v" . yank)
 	 ("C-z" . undo)
 	 ("C-f" . isearch-forward)
@@ -152,14 +135,33 @@ It returns the buffer (for elisp programing)."
 	 ("M-SPC" . set-mark-command)
 	 ("M-RET" . wakib-insert-newline-before)
 	 ("C-b" . switch-to-buffer)
-	 ("<escape>" . keyboard-escape-quit)) ;; doesn't work well, check ergoemacs
+	 ("<escape>" . keyboard-escape-quit)) ;; should be better, check ergoemacs
   "List of all wakib mode keybindings")
-  
-  
+
+
 (wakib-define-keys wakib-mode-map wakib-keylist)
 
-(define-key wakib-mode-map (kbd "C-e") ctl-x-map)
-(define-key wakib-mode-map (kbd "C-d") (wakib-cc-key))
+(define-key wakib-mode-map (kbd "C-e") (wakib-cc-key "C-x"))
+(define-key wakib-mode-map (kbd "C-d") (wakib-cc-key "C-c"))
+
+
+(defvar wakib-override-mode-map (make-sparse-keymap))
+(define-key wakib-override-mode-map (kbd "C-c") 'kill-ring-save)
+(define-key wakib-override-mode-map (kbd "C-x") 'kill-region)
+(defun wakib-override ()
+  "Add modemap to override C-c into minor-mode-overriding-map-alist"
+  (interactive)
+  (add-to-list 'minor-mode-overriding-map-alist (cons 'wakib-cc-mode wakib-override-mode-map)))
+(add-hook 'after-change-major-mode-hook 'wakib-override)
+
+
+;; Remove overrides on mode exit
+(defun wakib-update-cc-override ()
+  (setq wakib-cc-mode wakib-mode))
+(add-hook 'wakib-mode-hook 'wakib-update-cc-override)
+
+
+
 
 
 (define-minor-mode wakib-mode

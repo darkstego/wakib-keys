@@ -3,6 +3,39 @@
 Emacs minor mode that provides a modern, efficient and easy
 to learn keybindings
 
+## Features
+
+### Proper Prefix Key Remapping
+
+Using Ctrl+C and Ctrl+X as copy and paste respectively has always been tricky
+in Emacs. CUA mode is fidly and most attempts to replace those keys end up breaking
+down certain scenarios.
+
+This mode converts those keys to copy/paste while providing new remapping keys
+that all behave properly.
+
+* C-c and C-x now implement proper Copy/Paste. Not Emacs CUA.
+* New prefixes C-d and C-e work in all contexts.
+* Pressing C-d shows up as C-d in the minibuffer
+* These prefixes only act as the old key to start the prefix mode. So the vanilla
+Emacs C-c C-c press becomes C-d C-c in this mode.
+
+
+### Easy to learn
+
+This mode makes it easy to pick up Emacs and start unlocking its potential without having
+to sacrifice its power. The point of this mode it to leverage common shortcuts that
+you are used to while making it easy to learn Emacs.
+
+One of the ways this is done is by making individual shortcuts more powerful. So they give
+access to many features without having to memorize individual keys for each.
+Some keys perform non-repeatable tasks that can be utilized to do more. An example
+is the Ctrl+A key that is typically mapped to Select All. Selecting they entire buffer is
+not something that occurs often enough in emacs to merit occupying an entire shortcut, also
+it is non-repeatable. In this mode Ctrl+A becomes select region, so on first press it selects
+current line, on next press it selects current block(Paragraph). Press again and you get the Select
+All. That makes it easy to memorize shortcuts as similar behaviour are grouped together.
+
 ## Bindings
 
 The tables below show the bindings
@@ -79,38 +112,7 @@ then place
 ```
 in your init.el file
 
-## Features
 
-### Proper Prefix Key Remapping
-
-Using Ctrl+C and Ctrl+X as copy and paste respectively has always been tricky
-in Emacs. CUA mode is fidly and most attempts to replace those keys end up breaking
-down certain scenarios.
-
-This mode converts those keys to copy/paste while providing new remapping keys
-that all behave properly.
-
-* C-c and C-x now implement proper Copy/Paste. Not Emacs CUA.
-* New prefixes C-d and C-e work in all contexts.
-* Pressing C-d shows up as C-d in the minibuffer
-* These prefixes only act as the old key to start the prefix mode. So the vanilla
-Emacs C-c C-c press becomes C-d C-c in this mode.
-
-
-### Easy to learn
-
-This mode makes it easy to pick up Emacs and start unlocking its potential without having
-to sacrifice its power. The point of this mode it to leverage common shortcuts that
-you are used to while making it easy to learn Emacs.
-
-One of the ways this is done is by making individual shortcuts more powerful. So they give
-access to many features without having to memorize individual keys for each.
-Some keys perform non-repeatable tasks that can be utilized to do more. An example
-is the Ctrl+A key that is typically mapped to Select All. Selecting they entire buffer is
-not something that occurs often enough in emacs to merit occupying an entire shortcut, also
-it is non-repeatable. In this mode Ctrl+A becomes select region, so on first press it selects
-current line, on next press it selects current block(Paragraph). Press again and you get the Select
-All. That makes it easy to memorize shortcuts as similar behaviour are grouped together.
 
 ## Thanks
 

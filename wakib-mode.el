@@ -206,8 +206,7 @@ It returns the buffer (for elisp programing)."
 	 ("C-<prior>" . previous-buffer)
 	 ("C-v" . yank)
 	 ("C-z" . undo)
-	 ("C-f" . isearch-forward)
-	 ("C-F" . isearch-backward)
+	 ("C-f" . isearch-forward) ;Enable searching backwards with shift
 	 ("C-s" . save-buffer)
 	 ("C-p" . print-buffer)
 	 ("C-a" . wakib-select-line-block-all)

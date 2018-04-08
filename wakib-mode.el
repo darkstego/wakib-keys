@@ -1,4 +1,31 @@
+;;; wakib-mode.el --- Convenience wrappers for keybindings. -*- lexical-binding: t -*-
+
+;; Author: Abdulla Bubshait
+;; URL: https://github.com/darkstego/wakib-mode
+;; Created: 6 April 2018
+;; Keywords: vim, evil, leader, keybindings, keys
+;; Package-Requires: ((emacs "24.4"))
+;; Version: 0.1
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+;; Code
+
 ;; Functions & Macros
+
 
 (cl-defmacro wakib-cc-key (key)
   "Act as prefix definition in the current context.
@@ -29,6 +56,19 @@ definition. This idea came from general.el"
 
 
 ;; Commands
+
+
+(defun wakib-select-block-or-all ()
+  "Select the current block of next between empty lines."
+  (interactive)
+  (let (p1)
+    (when (re-search-backward "\n[ \t]*\n" nil "move")
+		(re-search-forward "\n[ \t]*\n"))
+	 (setq p1 (point))
+	 (when (re-search-forward "\n[ \t]*\n" nil "move")
+		(re-search-backward "\n[ \t]*\n"))
+	 (set-mark p1)))
+
 
 (defun wakib-new-empty-buffer ()
   "Create a new empty buffer and switch to it.

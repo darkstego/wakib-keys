@@ -11,46 +11,54 @@ This is just the start, I hope to expand on it very soon
 
 ### Movement
 
-| Key | Binding |
-| --- | --- |
-| Alt + I/J/K/L | Inverse T movement by Char |
-| Alt+Shift+ I/K | Page Up/Down |
-| Alt+ U/O | Back/Forward Word |
+| Key            | Binding                            |
+| ---            | ---                                |
+| Alt + I/J/K/L  | Inverse T movement by Char         |
+| Alt+Shift+ I/K | Page Up/Down                       |
+| Alt+ U/O       | Back/Forward Word                  |
 | Alt+Shift+ U/O | Beginning/End of Line or Paragraph |
 
 ### Editing
 
-| Key | Binding |
-| --- | --- |
-| Alt + E/R | Delete Word Back/Forward |
-| Alt+ D/F | Delete Char Back/Forward |
+| Key         | Binding                     |
+| ---         | ---                         |
+| Alt + E/R   | Delete Word Back/Forward    |
+| Alt+ D/F    | Delete Char Back/Forward    |
 | Alt + Space | Set/Stop Mark for Selection |
 
 
 ### CUA
 
-| Key            | Binding                            |
-| ---            | ---                                |
-| Ctrl + O       | Open File                          |
-| Ctrl + P       | Print                              |
-| Ctrl + F         | Search                  |
+| Key      | Binding      |
+| ---      | ---          |
+| Ctrl + O | Open File    |
+| Ctrl + P | Print        |
+| Ctrl + F | Search       |
 | Ctrl + W | Close Buffer |
-| Ctrl + S | Save |
-| Ctrl + Z | Undo |
-| Ctrl + X | Cut |
-| Ctrl + C | Copy |
-| Ctrl + V | Paste |
-| Alt + F4 | Close Emacs |
+| Ctrl + S | Save         |
+| Ctrl + Z | Undo         |
+| Ctrl + X | Cut          |
+| Ctrl + C | Copy         |
+| Ctrl + V | Paste        |
+
+
+### UI
+
+| Key      | Binding            |
+| ---      | ---                |
+| Ctrl + = | Increase Font Size |
+| Ctrl + - | Decrease Font Size |
+
 
 
 ### Emacs Keys
 
 Yes, those have finally moved
 
-| Old Key            | New Key                            |
-| ---            | ---                                |
-| Ctrl + C (prefix only)      | Ctrl + D                        |
-| Ctrl + X (prefix only)      | Ctrl + E                           |
+| Old Key                          | New Key  |
+| ---                              | ---      |
+| Ctrl + C (prefix only)           | Ctrl + D |
+| Ctrl + X (prefix only)           | Ctrl + E |
 | Alt + X  (not overwritten.. yet) | Alt + A  |
 
 
@@ -68,7 +76,10 @@ in your init.el file
 
 ## Features
 
-Proper CUA implementation
+Proper CUA implementation. The Emacs CUA implementation leaves a lot to be desired.
+This minor mode actually moves the 
+
+
 
 Moved the common Emacs prefixes to free up key for proper copy-cut shortcuts
 

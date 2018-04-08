@@ -27,7 +27,7 @@
 ;; Functions & Macros
 
 
-(cl-defmacro wakib-cc-key (key)
+(cl-defmacro wakib-dynamic-binding (key)
   "Act as prefix definition in the current context.
 This uses an extended menu item's capability of dynamically computing a
 definition. This idea came from general.el"
@@ -36,11 +36,11 @@ definition. This idea came from general.el"
      nil
      :filter
      (lambda (&optional _)
-		 ,`(wakib-get-all-keymaps ,key))))
+		 ,`(wakib-key-binding ,key))))
 
 
-;; should use let instead of double call to (car x)
-(defun wakib-minor-cc-keymaps(key)
+;; should probably use let instead of double call to (car x)
+(defun wakib-minor-mode-key-binding (key)
   (let ((active-maps nil))
 	 (mapc (lambda (x) 
 				(when (and (symbolp (car x)) (symbol-value (car x)))
@@ -49,25 +49,71 @@ definition. This idea came from general.el"
 	 (make-composed-keymap active-maps)))
 
 
-
 ;; might need to do keymap inheretence to perserve priority
-(defun wakib-get-all-keymaps (key)
-  (make-composed-keymap (list (wakib-minor-cc-keymaps key) (local-key-binding (kbd key)) (global-key-binding (kbd key)))))
+(defun wakib-key-binding (key)
+  (make-composed-keymap (list (wakib-minor-mode-key-binding key) (local-key-binding (kbd key)) (global-key-binding (kbd key)))))
 
 
 ;; Commands
 
-
-(defun wakib-select-block-or-all ()
-  "Select the current block of next between empty lines."
+;;  not-region-active or region in same line
+(defun wakib-select-line-block-all ()
+  "Selects line, if line is selected then selects block, if block
+is selected then selects entire buffer"
   (interactive)
-  (let (p1)
-    (when (re-search-backward "\n[ \t]*\n" nil "move")
-		(re-search-forward "\n[ \t]*\n"))
-	 (setq p1 (point))
-	 (when (re-search-forward "\n[ \t]*\n" nil "move")
-		(re-search-backward "\n[ \t]*\n"))
-	 (set-mark p1)))
+  (let ((p1 (region-beginning))
+		  (p2 (region-end))
+		  (x1)
+		  (x2))
+	 (unless (region-active-p)
+		(setq p1 (point))
+		(setq p2 (point)))
+	 (cond ((progn (beginning-of-line)
+						(setq x1 (point))
+						(end-of-line)
+						(setq x2 (point)) 
+						(and (<= x1 p1)
+							  (> (- x2 x1) (- p2 p1))))
+			  (set-mark x1))
+			 ((progn (when (re-search-backward "\n[ \t]*\n" nil "move")
+						  (re-search-forward "\n[ \t]*\n"))
+						(setq x1 (point))
+						(when (re-search-forward "\n[ \t]*\n" nil "move")
+						  (re-search-backward "\n[ \t]*\n"))
+						(setq x2 (point))
+						(and (<= x1 p1)
+							  (> (- x2 x1) (- p2 p1))))
+			  (set-mark x1))
+			 (t (beginning-of-buffer)
+				 (set-mark (point))
+				 (end-of-buffer)))))
+
+
+(defun wakib-beginning-line-or-block ()
+  "Move to the beginning of line, if there then move to beginning of block"
+  (interactive)
+  (let ((p (point)))
+	 (beginning-of-line)
+	 (when (eq p (point))
+		(when (re-search-backward "\n[ \t]*\n" nil "move")
+		  (re-search-forward "\n[ \t]*\n")))
+	 (when (eq p (point))
+		(re-search-backward "\n[ \t]*\n" nil "move")
+		(when (re-search-backward "\n[ \t]*\n" nil "move")
+		  (re-search-forward "\n[ \t]*\n")))))
+
+(defun wakib-end-line-or-block ()
+  "Move to the end of line, if there then move to end of block"
+  (interactive)
+  (let ((p (point)))
+	 (end-of-line)
+	 (when (eq p (point))
+		(when (re-search-forward "\n[ \t]*\n" nil "move")
+		  (re-search-backward "\n[ \t]*\n")))
+	 (when (eq p (point))
+		(re-search-forward "\n[ \t]*\n" nil "move")
+		(when (re-search-forward "\n[ \t]*\n" nil "move")
+		  (re-search-backward "\n[ \t]*\n")))))
 
 
 (defun wakib-new-empty-buffer ()
@@ -149,8 +195,8 @@ It returns the buffer (for elisp programing)."
 	 ("M-k" . next-line)
 	 ("M-u" . backward-word)
 	 ("M-o" . forward-word)
-	 ("M-U" . wakib-beginning-of-line-or-block)
-	 ("M-O" . wakib-end-of-line-or-block)
+	 ("M-U" . wakib-beginning-line-or-block)
+	 ("M-O" . wakib-end-line-or-block)
 	 ("M-I" . scroll-down)
 	 ("M-K" . scroll-up)
 	 ("C-n" . wakib-new-empty-buffer)
@@ -164,8 +210,14 @@ It returns the buffer (for elisp programing)."
 	 ("C-F" . isearch-backward)
 	 ("C-s" . save-buffer)
 	 ("C-p" . print-buffer)
+	 ("C-a" . wakib-select-line-block-all)
 	 ("C-=" . text-scale-increase)
 	 ("C--" . text-scale-decrease)
+	 ("M-s" . switch-window)
+	 ("M-4" . split-window-right)
+	 ("M-$" . split-window-below)
+	 ("M-3" . delete-other-windows)
+	 ("M-2" . delete-window)
 	 ("M-e" . backward-kill-word)
 	 ("M-r" . kill-word)
 	 ("M-a" . execute-extended-command)
@@ -181,8 +233,8 @@ It returns the buffer (for elisp programing)."
 
 (wakib-define-keys wakib-mode-map wakib-keylist)
 
-(define-key wakib-mode-map (kbd "C-e") (wakib-cc-key "C-x"))
-(define-key wakib-mode-map (kbd "C-d") (wakib-cc-key "C-c"))
+(define-key wakib-mode-map (kbd "C-e") (wakib-dynamic-binding "C-x"))
+(define-key wakib-mode-map (kbd "C-d") (wakib-dynamic-binding "C-c"))
 
 
 (defvar wakib-override-mode-map (make-sparse-keymap))

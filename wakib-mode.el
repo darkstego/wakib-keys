@@ -9,8 +9,6 @@
 
 ;; This file is not part of GNU Emacs.
 
-;;; Commentary:
-
 ;; Emacs minor mode that provides a modern, efficient and easy to learn keybindings
 
 ;; This program is free software: you can redistribute it and/or modify
@@ -26,20 +24,25 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+;;; Commentary:
+
+;;
+
 ;;; Code:
+
 
 ;; Functions & Macros
 
 
-(cl-defmacro wakib-dynamic-binding (key)
+(defmacro wakib-dynamic-binding (key)
   "Act as prefix definition in the current context.
 This uses an extended menu item's capability of dynamically computing a
 definition. This idea came from general.el"
   `'(menu-item
-     ,""
-     nil
-     :filter
-     (lambda (&optional _)
+	  ,""
+	  nil
+	  :filter
+	  (lambda (&optional _)
 		 ,`(wakib-key-binding ,key))))
 
 
@@ -211,12 +214,13 @@ It returns the buffer (for elisp programing)."
 	 ("C-v" . yank)
 	 ("C-z" . undo)
 	 ("C-f" . isearch-forward) ;Enable searching backwards with shift
+	 ("C-S-f" . isearch-backward)
 	 ("C-s" . save-buffer)
 	 ("C-p" . print-buffer)
 	 ("C-a" . wakib-select-line-block-all)
 	 ("C-=" . text-scale-increase)
 	 ("C--" . text-scale-decrease)
-	 ("M-s" . switch-window)
+	 ("M-s" . other-window)
 	 ("M-4" . split-window-right)
 	 ("M-$" . split-window-below)
 	 ("M-3" . delete-other-windows)
@@ -228,9 +232,10 @@ It returns the buffer (for elisp programing)."
 	 ("M-d" . delete-backward-char)
 	 ("M-f" . delete-char)
 	 ("M-SPC" . set-mark-command)
+	 ("M-S-SPC" . set-rectangular-region-anchor)
 	 ("M-RET" . wakib-insert-newline-before)
 	 ("C-b" . switch-to-buffer)
-	 ("<escape>" . keyboard-escape-quit)) ;; should be better, check ergoemacs
+	 ("<escape>" . keyboard-quit)) ;; should be better, check ergoemacs
   "List of all wakib mode keybindings")
 
 

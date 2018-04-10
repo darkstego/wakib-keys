@@ -34,16 +34,16 @@
 ;; Functions & Macros
 
 
-(defmacro wakib-dynamic-binding (key)
+(defun wakib-dynamic-binding (key)
   "Act as prefix definition in the current context.
 This uses an extended menu item's capability of dynamically computing a
 definition. This idea came from general.el"
-  `'(menu-item
-	  ,""
-	  nil
-	  :filter
-	  (lambda (&optional _)
-		 ,`(wakib-key-binding ,key))))
+  `(menu-item
+	 ,""
+	 nil
+	 :filter
+	 (lambda (&optional _)
+		,`(wakib-key-binding ,key))))
 
 
 ;; should probably use let instead of double call to (car x)
@@ -60,10 +60,9 @@ definition. This idea came from general.el"
 (defun wakib-key-binding (key)
   (make-composed-keymap (list (wakib-minor-mode-key-binding key) (local-key-binding (kbd key)) (global-key-binding (kbd key)))))
 
-
 ;; Commands
 
-;;  not-region-active or region in same line
+;; might be a more functional way to do this
 (defun wakib-select-line-block-all ()
   "Selects line, if line is selected then selects block, if block
 is selected then selects entire buffer"
@@ -224,7 +223,7 @@ It returns the buffer (for elisp programing)."
 	 ("C-<prior>" . previous-buffer)
 	 ("C-v" . yank)
 	 ("C-z" . undo)
-	 ("C-f" . isearch-forward) ;Enable searching backwards with shift
+	 ("C-f" . isearch-forward)
 	 ("C-S-f" . isearch-backward)
 	 ("C-s" . save-buffer)
 	 ("C-p" . print-buffer)
@@ -246,7 +245,7 @@ It returns the buffer (for elisp programing)."
 	 ("M-S-SPC" . set-rectangular-region-anchor)
 	 ("M-RET" . wakib-insert-newline-before)
 	 ("C-b" . switch-to-buffer)
-	 ("<escape>" . keyboard-quit)) ;; should be better, check ergoemacs
+	 ("<escape>" . keyboard-quit)) ;; should quit minibuffer too
   "List of all wakib mode keybindings")
 
 
@@ -270,9 +269,6 @@ It returns the buffer (for elisp programing)."
 (defun wakib-update-cc-override ()
   (setq wakib-cc-mode wakib-mode))
 (add-hook 'wakib-mode-hook 'wakib-update-cc-override)
-
-
-
 
 
 (define-minor-mode wakib-mode

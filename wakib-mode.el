@@ -245,6 +245,7 @@ It returns the buffer (for elisp programing)."
 	 ("M-S-SPC" . set-rectangular-region-anchor)
 	 ("M-RET" . wakib-insert-newline-before)
 	 ("C-b" . switch-to-buffer)
+	 ("M-X" . pp-eval-expression)
 	 ("<escape>" . keyboard-quit)) ;; should quit minibuffer too
   "List of all wakib mode keybindings")
 

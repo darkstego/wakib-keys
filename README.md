@@ -62,18 +62,19 @@ This is just the start, I hope to expand on it very soon
 
 ### CUA
 
-| Key      | Binding               |
-| ---      | ---                   |
-| Ctrl + O | Open File             |
-| Ctrl + P | Print                 |
-| Ctrl + F | Search                |
-| Ctrl + W | Close Buffer          |
-| Ctrl + S | Save                  |
-| Ctrl + Z | Undo                  |
-| Ctrl + X | Cut                   |
-| Ctrl + C | Copy                  |
-| Ctrl + V | Paste                 |
-| Ctrl + A | Select Line/Block/All |
+| Key              | Binding               |
+| ---              | ---                   |
+| Ctrl + O         | Open File             |
+| Ctrl + P         | Print                 |
+| Ctrl + F         | Search                |
+| Ctrl + Shift + F | Search Backwards      |
+| Ctrl + W         | Close Buffer          |
+| Ctrl + S         | Save                  |
+| Ctrl + Z         | Undo                  |
+| Ctrl + X         | Cut                   |
+| Ctrl + C         | Copy                  |
+| Ctrl + V         | Paste                 |
+| Ctrl + A         | Select Line/Block/All |
 
 
 ### UI

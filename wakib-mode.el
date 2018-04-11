@@ -1,4 +1,4 @@
-;;; wakib-mode.el --- Convenience wrappers for keybindings. -*- lexical-binding: t -*-
+;;; wakib-mode.el --- Minor Mode for Modern Keybindings -*- lexical-binding: t -*-
 
 ;; Author: Abdulla Bubshait
 ;; URL: https://github.com/darkstego/wakib-mode
@@ -42,8 +42,8 @@ definition. This idea came from general.el"
 	 ,""
 	 nil
 	 :filter
-	 (lambda (&optional _)
-		,`(wakib-key-binding ,key))))
+	 ,(lambda (&optional _)
+		 (wakib-key-binding key))))
 
 
 ;; should probably use let instead of double call to (car x)
@@ -61,6 +61,21 @@ definition. This idea came from general.el"
   (make-composed-keymap (list (wakib-minor-mode-key-binding key) (local-key-binding (kbd key)) (global-key-binding (kbd key)))))
 
 ;; Commands
+
+(defun wakib-previous (&optional arg)
+  "Perform context aware Previous function"
+  (interactive "p")
+  (cond ((eq last-command 'yank)
+			(yank-pop arg))
+		  ))
+
+(defun wakib-next (&optional arg)
+  "Perform context aware Next function"
+  (interactive "p")
+  (cond ((eq last-command 'yank)
+			(yank-pop (- arg)))))
+
+
 
 ;; might be a more functional way to do this
 (defun wakib-select-line-block-all ()
@@ -230,6 +245,8 @@ It returns the buffer (for elisp programing)."
 	 ("C-a" . wakib-select-line-block-all)
 	 ("C-=" . text-scale-increase)
 	 ("C--" . text-scale-decrease)
+	 ("C-j" . wakib-previous)
+	 ("C-l" . wakib-next)
 	 ("M-s" . other-window)
 	 ("M-4" . split-window-right)
 	 ("M-$" . split-window-below)
@@ -243,7 +260,7 @@ It returns the buffer (for elisp programing)."
 	 ("M-f" . delete-char)
 	 ("M-SPC" . set-mark-command)
 	 ("M-S-SPC" . set-rectangular-region-anchor)
-	 ("M-RET" . wakib-insert-newline-before)
+	 ("S-RET" . wakib-insert-newline-before)
 	 ("C-b" . switch-to-buffer)
 	 ("M-X" . pp-eval-expression)
 	 ("<escape>" . keyboard-quit)) ;; should quit minibuffer too
@@ -270,6 +287,13 @@ It returns the buffer (for elisp programing)."
 (defun wakib-update-cc-override ()
   (setq wakib-cc-mode wakib-mode))
 (add-hook 'wakib-mode-hook 'wakib-update-cc-override)
+
+
+;; Modifying other modules
+(define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "C-S-f") 'isearch-repeat-backward)
+(define-key isearch-mode-map (kbd "C-l") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "C-j") 'isearch-repeat-backward)
 
 
 (define-minor-mode wakib-mode

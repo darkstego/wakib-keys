@@ -294,6 +294,7 @@ It returns the buffer (for elisp programing)."
 (define-key isearch-mode-map (kbd "C-S-f") 'isearch-repeat-backward)
 (define-key isearch-mode-map (kbd "C-l") 'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "C-j") 'isearch-repeat-backward)
+(define-key isearch-mode-map (kbd "C-v") 'isearch-yank-kill)
 
 
 (define-minor-mode wakib-mode

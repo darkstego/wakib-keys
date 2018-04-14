@@ -151,7 +151,6 @@ is selected then selects entire buffer"
 (defun wakib-new-empty-buffer ()
   "Create a new empty buffer and switch to it.
 New buffer will be named “untitled” or “untitled<2>”, etc.
-
 It returns the buffer (for elisp programing)."
   (interactive)
   (let (($buf (generate-new-buffer "untitled")))
@@ -240,13 +239,15 @@ It returns the buffer (for elisp programing)."
 	 ("C-z" . undo)
 	 ("C-f" . isearch-forward)
 	 ("C-S-f" . isearch-backward)
+	 ("C-r" . query-replace)
+	 ("C-S-r" . query-replace-regexp)
 	 ("C-s" . save-buffer)
 	 ("C-p" . print-buffer)
 	 ("C-a" . wakib-select-line-block-all)
 	 ("C-=" . text-scale-increase)
 	 ("C--" . text-scale-decrease)
 	 ("C-j" . wakib-previous)
-	 ("C-l" . wakib-next)
+	 ("C-l" . wakib-next) 
 	 ("M-s" . other-window)
 	 ("M-4" . split-window-right)
 	 ("M-$" . split-window-below)
@@ -258,12 +259,15 @@ It returns the buffer (for elisp programing)."
 	 ("M-<f4>" . save-buffers-kill-terminal)
 	 ("M-d" . delete-backward-char)
 	 ("M-f" . delete-char)
-	 ("M-SPC" . set-mark-command)
+	 ("M-a" . kill-whole-line)
+ 	 ("M-SPC" . set-mark-command)
 	 ("M-S-SPC" . set-rectangular-region-anchor)
 	 ("S-RET" . wakib-insert-newline-before)
 	 ("C-b" . switch-to-buffer)
 	 ("M-X" . pp-eval-expression)
-	 ("<escape>" . keyboard-quit)) ;; should quit minibuffer too
+	 ("<escape>" . keyboard-quit) ;; should quit minibuffer too
+	 ("C-A" . er/expand-region)
+	 ("M-m" . avy-got-char-2))
   "List of all wakib mode keybindings")
 
 
@@ -273,20 +277,20 @@ It returns the buffer (for elisp programing)."
 (define-key wakib-mode-map (kbd "C-d") (wakib-dynamic-binding "C-c"))
 
 
-(defvar wakib-override-mode-map (make-sparse-keymap))
+(defvar wakib-override-mode-map (make-sparse-keymap) "Keybinding for override keys")
 (define-key wakib-override-mode-map (kbd "C-c") 'kill-ring-save)
 (define-key wakib-override-mode-map (kbd "C-x") 'kill-region)
 (defun wakib-override ()
   "Add modemap to override C-c into minor-mode-overriding-map-alist"
   (interactive)
-  (add-to-list 'minor-mode-overriding-map-alist (cons 'wakib-cc-mode wakib-override-mode-map)))
+  (add-to-list 'minor-mode-overriding-map-alist (cons 'wakib-override-mode wakib-override-mode-map)))
 (add-hook 'after-change-major-mode-hook 'wakib-override)
 
 
 ;; Remove overrides on mode exit
-(defun wakib-update-cc-override ()
-  (setq wakib-cc-mode wakib-mode))
-(add-hook 'wakib-mode-hook 'wakib-update-cc-override)
+(defun wakib-update-override ()
+  (setq wakib-override-mode wakib-mode))
+(add-hook 'wakib-mode-hook 'wakib-update-override)
 
 
 ;; Modifying other modules
@@ -308,6 +312,7 @@ Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :lighter " Wakib"
   :keymap wakib-mode-map
   :init-value t)
+
 
 
 (provide 'wakib-mode)

@@ -254,6 +254,7 @@ It returns the buffer (for elisp programing)."
 	 ("C-j" . wakib-previous)
 	 ("C-l" . wakib-next)
 	 ("M-s" . other-window)
+	 ("M-M" . goto-line)
 	 ("M-4" . split-window-right)
 	 ("M-$" . split-window-below)
 	 ("M-3" . delete-other-windows)

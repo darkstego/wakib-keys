@@ -250,6 +250,7 @@ It returns the buffer (for elisp programing)."
 	 ("C-j" . wakib-previous)
 	 ("C-l" . wakib-next)
 	 ("M-s" . other-window)
+	 ("M-M" . goto-line)
 	 ("M-4" . split-window-right)
 	 ("M-$" . split-window-below)
 	 ("M-3" . delete-other-windows)
@@ -267,7 +268,7 @@ It returns the buffer (for elisp programing)."
 	 ("C-b" . switch-to-buffer)
 	 ("M-X" . pp-eval-expression)
 	 ("<escape>" . keyboard-quit) ;; should quit minibuffer too
-	 ("C-A" . er/expand-region)
+	 ("C-S-a" . er/expand-region)
 	 ("M-m" . avy-goto-char-2))
   "List of all wakib mode keybindings")
 

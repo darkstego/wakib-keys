@@ -120,6 +120,10 @@ is selected then selects entire buffer"
 		(push-mark x2 t t)
 		(goto-char x1))))
 
+(defun wakib-back-to-indentation-or-beginning () (interactive)
+		 (if (= (point) (progn (back-to-indentation) (point)))
+			  (beginning-of-line)))
+
 
 (defun wakib-beginning-line-or-block ()
   "Move to the beginning of line, if there then move to beginning of block"
@@ -267,7 +271,7 @@ It returns the buffer (for elisp programing)."
 	 ("C-b" . switch-to-buffer)
 	 ("M-X" . pp-eval-expression)
 	 ("<escape>" . keyboard-quit) ;; should quit minibuffer too
-	 ("C-A" . er/expand-region)
+	 ("C-S-a" . er/expand-region)
 	 ("M-m" . avy-goto-char-2))
   "List of all wakib mode keybindings")
 

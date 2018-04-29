@@ -120,6 +120,10 @@ is selected then selects entire buffer"
 		(push-mark x2 t t)
 		(goto-char x1))))
 
+(defun wakib-back-to-indentation-or-beginning () (interactive)
+		 (if (= (point) (progn (back-to-indentation) (point)))
+			  (beginning-of-line)))
+
 
 (defun wakib-beginning-line-or-block ()
   "Move to the beginning of line, if there then move to beginning of block"

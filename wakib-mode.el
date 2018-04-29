@@ -240,6 +240,7 @@ It returns the buffer (for elisp programing)."
 	 ("C-o" . find-file)
 	 ("C-O" . revert-buffer)
 	 ("C-w" . wakib-close-current-buffer)
+	 ("C-q" . save-buffers-kill-emacs)
 	 ("C-<next>" . next-buffer)
 	 ("C-<prior>" . previous-buffer)
 	 ("C-v" . yank)

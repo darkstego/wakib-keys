@@ -3,9 +3,10 @@
 ;; Author: Abdulla Bubshait
 ;; URL: https://github.com/darkstego/wakib-mode
 ;; Created: 6 April 2018
-;; Keywords: vim, evil, leader, keybindings, keys
+;; Keywords: convenience, keybindings, keys
+;; License: GPL v3
 ;; Package-Requires: ((emacs "24.4"))
-;; Version: 0.1
+;; Version: 0.3.10
 
 ;; This file is not part of GNU Emacs.
 
@@ -26,7 +27,8 @@
 
 ;;; Commentary:
 
-;;
+;; This package aims to provide new keybindings for basic Emacs
+;; functions.  The goal of this package is to provide
 
 ;;; Code:
 
@@ -35,9 +37,9 @@
 
 
 (defun wakib-dynamic-binding (key)
-  "Act as prefix definition in the current context.
+  "Act as KEY in the current context.
 This uses an extended menu item's capability of dynamically computing a
-definition. This idea came from general.el"
+definition.  This idea came from general.el"
   `(menu-item
 	 ,""
 	 nil
@@ -48,8 +50,11 @@ definition. This idea came from general.el"
 
 ;; should probably use let instead of double call to (car x)
 (defun wakib-minor-mode-key-binding (key)
+  "Function return all keymaps defind to KEY within minor modes.
+This function ignores the overriding maps that will be used to override
+KEY"
   (let ((active-maps nil))
-	 (mapc (lambda (x) 
+	 (mapc (lambda (x)
 				(when (and (symbolp (car x)) (symbol-value (car x)))
 				  (add-to-list 'active-maps  (lookup-key (cdr x) (kbd key)))))
 			 minor-mode-map-alist )
@@ -58,19 +63,22 @@ definition. This idea came from general.el"
 
 ;; might need to do keymap inheretence to perserve priority
 (defun wakib-key-binding (key)
+  "Return the full keymap bindings of KEY."
   (make-composed-keymap (list (wakib-minor-mode-key-binding key) (local-key-binding (kbd key)) (global-key-binding (kbd key)))))
 
 ;; Commands
 
 (defun wakib-previous (&optional arg)
-  "Perform context aware Previous function"
+  "Perform context aware Previous function.
+ARG used as repeat function for interactive"
   (interactive "p")
   (cond ((eq last-command 'yank)
 			(yank-pop arg))
 		  ))
 
 (defun wakib-next (&optional arg)
-  "Perform context aware Next function"
+  "Perform context aware Next function.
+ARG used as repeat for interactive function."
   (interactive "p")
   (cond ((eq last-command 'yank)
 			(yank-pop (- arg)))))
@@ -79,8 +87,7 @@ definition. This idea came from general.el"
 
 ;; might be a more functional way to do this
 (defun wakib-select-line-block-all ()
-  "Selects line, if line is selected then selects block, if block
-is selected then selects entire buffer"
+  "Select line.  Expands to block and then entire buffer."
   (interactive)
   (let ((p1 (region-beginning))
 		  (p2 (region-end))
@@ -97,7 +104,7 @@ is selected then selects entire buffer"
 	 (push-mark x1 t t)
 	 (goto-char p2)
 	 (end-of-line)
-	 (setq x2 (point)) 
+	 (setq x2 (point))
 	 (when (and (eq x1 p1)
 					(eq x2 p2))
 		(goto-char p1)
@@ -120,13 +127,15 @@ is selected then selects entire buffer"
 		(push-mark x2 t t)
 		(goto-char x1))))
 
-(defun wakib-back-to-indentation-or-beginning () (interactive)
-		 (if (= (point) (progn (back-to-indentation) (point)))
-			  (beginning-of-line)))
+(defun wakib-back-to-indentation-or-beginning ()
+  "Move to start of text or start of line."
+  (interactive)
+  (if (= (point) (progn (back-to-indentation) (point)))
+      (beginning-of-line)))
 
 
 (defun wakib-beginning-line-or-block ()
-  "Move to the beginning of line, if there then move to beginning of block"
+  "Move to the beginning of line, if there then move to beginning of block."
   (interactive)
   (let ((p (point)))
 	 (beginning-of-line)
@@ -139,7 +148,7 @@ is selected then selects entire buffer"
 		  (re-search-forward "\n[ \t]*\n")))))
 
 (defun wakib-end-line-or-block ()
-  "Move to the end of line, if there then move to end of block"
+  "Move to the end of line, if there then move to end of block."
   (interactive)
   (let ((p (point)))
 	 (end-of-line)
@@ -164,7 +173,7 @@ It returns the buffer (for elisp programing)."
 	 $buf))
 
 (defun wakib-insert-newline-before ()
-  "Insert a newline and indent before current line"
+  "Insert a newline and indent before current line."
   (interactive)
   (move-beginning-of-line)
   (newline-and-indent)
@@ -173,15 +182,13 @@ It returns the buffer (for elisp programing)."
 
 
 (defun wakib-close-current-buffer ()
-  "kill current buffer"
+  "Kill current buffer."
   (interactive)
   (kill-buffer (current-buffer)))
 
 
 (defun wakib-beginning-of-line-or-block ()
-  "Move cursor to beginning of line or previous paragraph.
-• When called first time, move cursor to beginning of char in current line. (if already, move to beginning of line.)
-• When called again, move cursor backward by jumping over any sequence of whitespaces containing 2 blank lines."
+  "Move cursor to beginning of line or previous paragraph."
   (interactive)
   (let (($p (point)))
     (if (or (equal (point) (line-beginning-position))
@@ -198,9 +205,7 @@ It returns the buffer (for elisp programing)."
           (beginning-of-line))))))
 
 (defun wakib-end-of-line-or-block ()
-  "Move cursor to end of line or next paragraph.
-• When called first time, move cursor to end of line.
-• When called again, move cursor forward by jumping over any sequence of whitespaces containing 2 blank lines."
+  "Move cursor to end of line or next paragraph."
   (interactive)
   (if (or (equal (point) (line-end-position))
           (equal last-command this-command ))
@@ -214,10 +219,10 @@ It returns the buffer (for elisp programing)."
 ;; no need expose any of these functions or variables
 ;; except for wakib-mode-map
 
-(defvar wakib-mode-map (make-sparse-keymap) "Key bindings for Wakib minor mode")
+(defvar wakib-mode-map (make-sparse-keymap) "Key bindings for Wakib minor mode.")
 
 (defun wakib-define-keys (keymap keylist)
-  "Map over alist (keylist) and add to keymap"
+  "Add to KEYMAP all keys in KEYLIST."
   (interactive)
   (mapc (lambda (pair)
           (define-key keymap (kbd (car pair)) (cdr pair)))
@@ -238,7 +243,7 @@ It returns the buffer (for elisp programing)."
 	 ("M-N" . end-of-buffer)
 	 ("C-n" . wakib-new-empty-buffer)
 	 ("C-o" . find-file)
-	 ("C-O" . revert-buffer)
+	 ("C-S-o" . revert-buffer)
 	 ("C-w" . wakib-close-current-buffer)
 	 ("C-q" . save-buffers-kill-emacs)
 	 ("C-<next>" . next-buffer)
@@ -277,7 +282,7 @@ It returns the buffer (for elisp programing)."
 	 ("M-X" . pp-eval-expression)
 	 ("<escape>" . keyboard-quit) ;; should quit minibuffer too
 	 ("M-m" . goto-line))
-  "List of all wakib mode keybindings")
+  "List of all wakib mode keybindings.")
 
 
 (wakib-define-keys wakib-mode-map wakib-keylist)
@@ -286,11 +291,11 @@ It returns the buffer (for elisp programing)."
 (define-key wakib-mode-map (kbd "C-d") (wakib-dynamic-binding "C-c"))
 
 
-(defvar wakib-override-mode-map (make-sparse-keymap) "Keybinding for override keys")
+(defvar wakib-override-mode-map (make-sparse-keymap) "Keybinding for override keys.")
 (define-key wakib-override-mode-map (kbd "C-c") 'kill-ring-save)
 (define-key wakib-override-mode-map (kbd "C-x") 'kill-region)
 (defun wakib-override ()
-  "Add modemap to override C-c into minor-mode-overriding-map-alist"
+  "Add modemap to override prefix keys into ‘minor-mode-overriding-map-alist’."
   (interactive)
   (add-to-list 'minor-mode-overriding-map-alist (cons 'wakib-override-mode wakib-override-mode-map)))
 (add-hook 'after-change-major-mode-hook 'wakib-override)
@@ -298,6 +303,7 @@ It returns the buffer (for elisp programing)."
 
 ;; Remove overrides on mode exit
 (defun wakib-update-override ()
+  "Link wakib override mode to wakib mode."
   (setq wakib-override-mode wakib-mode))
 (add-hook 'wakib-mode-hook 'wakib-update-override)
 

@@ -230,8 +230,11 @@ It returns the buffer (for elisp programing)."
 	 ("M-O" . wakib-end-line-or-block)
 	 ("M-I" . scroll-down)
 	 ("M-K" . scroll-up)
+	 ("M-n" . beginning-of-buffer)
+	 ("M-N" . end-of-buffer)
 	 ("C-n" . wakib-new-empty-buffer)
 	 ("C-o" . find-file)
+	 ("C-O" . revert-buffer)
 	 ("C-w" . wakib-close-current-buffer)
 	 ("C-<next>" . next-buffer)
 	 ("C-<prior>" . previous-buffer)
@@ -268,8 +271,7 @@ It returns the buffer (for elisp programing)."
 	 ("C-b" . switch-to-buffer)
 	 ("M-X" . pp-eval-expression)
 	 ("<escape>" . keyboard-quit) ;; should quit minibuffer too
-	 ("C-S-a" . er/expand-region)
-	 ("M-m" . avy-goto-char-2))
+	 ("M-m" . goto-line))
   "List of all wakib mode keybindings")
 
 

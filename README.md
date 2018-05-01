@@ -75,6 +75,8 @@ This is just the start, I hope to expand on it very soon
 | Ctrl + C         | Copy                  |
 | Ctrl + V         | Paste                 |
 | Ctrl + A         | Select Line/Block/All |
+| Ctrl + Q         | Quit                  |
+
 
 
 ### UI
@@ -98,7 +100,6 @@ Yes, those have finally moved
 | ---                              | ---      |
 | Ctrl + C (prefix only)           | Ctrl + D |
 | Ctrl + X (prefix only)           | Ctrl + E |
-| Alt + X  (not overwritten.. yet) | Alt + A  |
 
 
 

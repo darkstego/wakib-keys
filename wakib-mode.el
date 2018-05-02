@@ -246,7 +246,7 @@ It returns the buffer (for elisp programing)."
     ("C-S-n" . make-frame-command)
     ("C-o" . find-file)
     ("C-S-o" . revert-buffer)
-    ("C-w" . kill-buffer)
+    ("C-w" . kill-this-buffer)
     ("C-q" . save-buffers-kill-emacs)
     ("C-<next>" . next-buffer)
     ("C-<prior>" . previous-buffer)
@@ -286,11 +286,7 @@ It returns the buffer (for elisp programing)."
   "List of all wakib mode keybindings.")
 
 
-(wakib-define-keys wakib-mode-map wakib-keylist)
-
-(define-key wakib-mode-map (kbd "C-e") (wakib-dynamic-binding "C-x"))
-(define-key wakib-mode-map (kbd "C-d") (wakib-dynamic-binding "C-c"))
-
+;; TODO - MOVE to emulation-mode-map-alists
 
 (defvar wakib-override-mode-map (make-sparse-keymap) "Keybinding for override keys.")
 (define-key wakib-override-mode-map (kbd "C-c") 'kill-ring-save)
@@ -300,6 +296,12 @@ It returns the buffer (for elisp programing)."
   (interactive)
   (add-to-list 'minor-mode-overriding-map-alist (cons 'wakib-override-mode wakib-override-mode-map)))
 (add-hook 'after-change-major-mode-hook 'wakib-override)
+
+
+(wakib-define-keys wakib-mode-map wakib-keylist)
+
+(define-key wakib-mode-map (kbd "C-e") (wakib-dynamic-binding "C-x"))
+(define-key wakib-mode-map (kbd "C-d") (wakib-dynamic-binding "C-c"))
 
 
 ;; Remove overrides on mode exit

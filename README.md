@@ -1,7 +1,7 @@
-# Wakib
+# Wakib-mode
 
 Emacs minor mode that provides a modern, efficient and easy
-to learn keybindings
+to learn keybindings. 
 
 ## Features
 

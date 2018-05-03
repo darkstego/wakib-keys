@@ -89,7 +89,7 @@ ARG used as repeat for interactive function."
 (defun wakib-select-line-block-all ()
   "Select line.  Expands to block and then entire buffer."
   (interactive)
-  (unless (mark) (set-mark))
+  (unless (mark) (set-mark (point)))
   (let ((p1 (region-beginning))
 		  (p2 (region-end))
 		  (x1)
@@ -182,12 +182,6 @@ It returns the buffer (for elisp programing)."
   (indent-for-tab-command))
 
 
-(defun wakib-close-current-buffer ()
-  "Kill current buffer."
-  (interactive)
-  (kill-buffer (current-buffer)))
-
-
 (defun wakib-beginning-of-line-or-block ()
   "Move cursor to beginning of line or previous paragraph."
   (interactive)
@@ -223,92 +217,89 @@ It returns the buffer (for elisp programing)."
 (defvar wakib-mode-map (make-sparse-keymap) "Key bindings for Wakib minor mode.")
 
 (defun wakib-define-keys (keymap keylist)
-  "Add to KEYMAP all keys in KEYLIST."
+  "Add to KEYMAP all keys in KEYLIST.  
+Then add C-d and C-e to KEYMAP"
   (interactive)
   (mapc (lambda (pair)
           (define-key keymap (kbd (car pair)) (cdr pair)))
-        keylist))
+        keylist)
+  (define-key keymap (kbd "C-e") (wakib-dynamic-binding "C-x"))
+  (define-key keymap (kbd "C-d") (wakib-dynamic-binding "C-c")))
 
 (defvar wakib-keylist
   '(("M-j" . backward-char)
-    ("M-l" . forward-char)
-    ("M-i" . previous-line)
-    ("M-k" . next-line)
-    ("M-u" . backward-word)
-    ("M-o" . forward-word)
-    ("M-U" . wakib-beginning-line-or-block)
-    ("M-O" . wakib-end-line-or-block)
-    ("M-I" . scroll-down)
-    ("M-K" . scroll-up)
-    ("M-n" . beginning-of-buffer)
-    ("M-N" . end-of-buffer)
-    ("C-n" . wakib-new-empty-buffer)
-    ("C-S-n" . make-frame-command)
-    ("C-o" . find-file)
-    ("C-S-o" . revert-buffer)
-    ("C-w" . kill-this-buffer)
-    ("C-q" . save-buffers-kill-emacs)
-    ("C-<next>" . next-buffer)
-    ("C-<prior>" . previous-buffer)
-    ("C-v" . yank)
-    ("C-z" . undo)
-    ("C-f" . isearch-forward)
-    ("C-S-f" . isearch-backward)
-    ("C-r" . query-replace)
-    ("C-S-r" . query-replace-regexp)
-    ("C-s" . save-buffer)
-    ("C-p" . print-buffer)
-    ("C-a" . wakib-select-line-block-all)
-    ("C-+" . text-scale-increase)
-    ("C-=" . text-scale-increase)
-    ("C--" . text-scale-decrease)
-    ("C-j" . wakib-previous)
-    ("C-l" . wakib-next)
-    ("M-s" . other-window)
-    ("M-M" . goto-line)
-    ("M-4" . split-window-right)
-    ("M-$" . split-window-below)
-    ("M-3" . delete-other-windows)
-    ("M-2" . delete-window)
-    ("M-e" . backward-kill-word)
-    ("M-r" . kill-word)
-    ("M-a" . execute-extended-command)
-    ("M-d" . delete-backward-char)
-    ("M-f" . delete-char)
-    ("M-a" . kill-whole-line)
-    ("M-SPC" . set-mark-command)
-    ("M-S-SPC" . set-rectangular-region-anchor)
-    ("S-RET" . wakib-insert-newline-before)
-    ("C-b" . switch-to-buffer)
-    ("M-X" . pp-eval-expression)
-    ("<escape>" . keyboard-quit) ;; should quit minibuffer too
-    ("M-m" . goto-line))
+	 ("M-l" . forward-char)
+	 ("M-i" . previous-line)
+	 ("M-k" . next-line)
+	 ("M-u" . backward-word)
+	 ("M-o" . forward-word)
+	 ("M-U" . wakib-beginning-line-or-block)
+	 ("M-O" . wakib-end-line-or-block)
+	 ("M-I" . scroll-down)
+	 ("M-K" . scroll-up)
+	 ("M-n" . beginning-of-buffer)
+	 ("M-N" . end-of-buffer)
+	 ("C-n" . wakib-new-empty-buffer)
+	 ("C-o" . find-file)
+	 ("C-S-o" . revert-buffer)
+	 ("C-w" . kill-this-buffer)
+	 ("C-q" . save-buffers-kill-emacs)
+	 ("C-<next>" . next-buffer)
+	 ("C-<prior>" . previous-buffer)
+	 ("C-v" . yank)
+	 ("C-z" . undo)
+	 ("C-f" . isearch-forward)
+	 ("C-S-f" . isearch-backward)
+	 ("C-r" . query-replace)
+	 ("C-S-r" . query-replace-regexp)
+	 ("C-s" . save-buffer)
+	 ("C-p" . print-buffer)
+	 ("C-a" . wakib-select-line-block-all)
+	 ("C-+" . text-scale-increase)
+	 ("C-=" . text-scale-increase)
+	 ("C--" . text-scale-decrease)
+	 ("C-j" . wakib-previous)
+	 ("C-l" . wakib-next)
+	 ("M-s" . other-window)
+	 ("M-M" . goto-line)
+	 ("M-4" . split-window-right)
+	 ("M-$" . split-window-below)
+	 ("M-3" . delete-other-windows)
+	 ("M-2" . delete-window)
+	 ("M-e" . backward-kill-word)
+	 ("M-r" . kill-word)
+	 ("M-a" . execute-extended-command)
+	 ("M-<f4>" . save-buffers-kill-terminal)
+	 ("M-d" . delete-backward-char)
+	 ("M-f" . delete-char)
+	 ("M-a" . kill-whole-line)
+ 	 ("M-SPC" . set-mark-command)
+	 ("M-S-SPC" . set-rectangular-region-anchor)
+	 ("S-RET" . wakib-insert-newline-before)
+	 ("C-b" . switch-to-buffer)
+	 ("M-X" . pp-eval-expression)
+	 ("<escape>" . keyboard-quit) ;; should quit minibuffer too
+	 ("M-m" . goto-line))
   "List of all wakib mode keybindings.")
-
-
-;; TODO - MOVE to emulation-mode-map-alists
-
-(defvar wakib-override-mode-map (make-sparse-keymap) "Keybinding for override keys.")
-(define-key wakib-override-mode-map (kbd "C-c") 'kill-ring-save)
-(define-key wakib-override-mode-map (kbd "C-x") 'kill-region)
-(defun wakib-override ()
-  "Add modemap to override prefix keys into ‘minor-mode-overriding-map-alist’."
-  (interactive)
-  (add-to-list 'minor-mode-overriding-map-alist (cons 'wakib-override-mode wakib-override-mode-map)))
-(add-hook 'after-change-major-mode-hook 'wakib-override)
 
 
 (wakib-define-keys wakib-mode-map wakib-keylist)
 
-(define-key wakib-mode-map (kbd "C-e") (wakib-dynamic-binding "C-x"))
-(define-key wakib-mode-map (kbd "C-d") (wakib-dynamic-binding "C-c"))
+(defvar wakib-override-mode nil)
+(defvar wakib-override-mode-map (make-sparse-keymap) "Keybinding for override keys.")
+(define-key wakib-override-mode-map (kbd "C-c") 'kill-ring-save)
+(define-key wakib-override-mode-map (kbd "C-x") 'kill-region)
+(add-to-list 'emulation-mode-map-alists
+	     `((wakib-override-mode . ,wakib-override-mode-map)))
 
 
-;; Remove overrides on mode exit
-(defun wakib-update-override ()
-  "Link wakib override mode to wakib mode."
-  (setq wakib-override-mode wakib-mode))
-(add-hook 'wakib-mode-hook 'wakib-update-override)
+
+(defun wakib-global-mode ()
+  "Enable wakib bindings globally. This cannot be disabled with negative argument"
+  (interactive)
+  (wakib-define-keys (current-global-map) wakib-keylist)
+  (setq wakib-override-mode t))
+
 
 
 ;; Modifying other modules
@@ -329,7 +320,9 @@ just to use their editor.
 Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :lighter " Wakib"
   :keymap wakib-mode-map
-  :init-value t)
+  :init-value nil
+  :global t
+  (setq wakib-override-mode wakib-mode))
 
 
 

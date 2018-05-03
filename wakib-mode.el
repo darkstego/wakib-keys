@@ -165,13 +165,13 @@ ARG used as repeat for interactive function."
 (defun wakib-new-empty-buffer ()
   "Create a new empty buffer and switch to it.
 New buffer will be named “untitled” or “untitled<2>”, etc.
-It returns the buffer (for elisp programing)."
+It returns the buffer."
   (interactive)
-  (let (($buf (generate-new-buffer "untitled")))
-	 (switch-to-buffer $buf)
-	 (funcall initial-major-mode)
-	 (setq buffer-offer-save t)
-	 $buf))
+  (let ((buffer (generate-new-buffer "untitled")))
+    (set-buffer-major-mode buffer)
+    (switch-to-buffer buffer)
+    (setq buffer-offer-save t)
+    buffer))
 
 (defun wakib-insert-newline-before ()
   "Insert a newline and indent before current line."
@@ -208,6 +208,10 @@ It returns the buffer (for elisp programing)."
         (re-search-forward "\n[\t\n ]*\n+" nil "move" ))
     (end-of-line)))
 
+(defun wakib-backward-kill-line ()
+  "Kill from cursor to start of line."
+  (interactive)
+  (kill-line 0))
 
 ;; Setup for keymap
 ;; I should probably move this into a let statement,
@@ -228,58 +232,61 @@ Then add C-d and C-e to KEYMAP"
 
 (defvar wakib-keylist
   '(("M-j" . backward-char)
-	 ("M-l" . forward-char)
-	 ("M-i" . previous-line)
-	 ("M-k" . next-line)
-	 ("M-u" . backward-word)
-	 ("M-o" . forward-word)
-	 ("M-U" . wakib-beginning-line-or-block)
-	 ("M-O" . wakib-end-line-or-block)
-	 ("M-I" . scroll-down)
-	 ("M-K" . scroll-up)
-	 ("M-n" . beginning-of-buffer)
-	 ("M-N" . end-of-buffer)
-	 ("C-n" . wakib-new-empty-buffer)
-	 ("C-o" . find-file)
-	 ("C-S-o" . revert-buffer)
-	 ("C-w" . kill-this-buffer)
-	 ("C-q" . save-buffers-kill-emacs)
-	 ("C-<next>" . next-buffer)
-	 ("C-<prior>" . previous-buffer)
-	 ("C-v" . yank)
-	 ("C-z" . undo)
-	 ("C-f" . isearch-forward)
-	 ("C-S-f" . isearch-backward)
-	 ("C-r" . query-replace)
-	 ("C-S-r" . query-replace-regexp)
-	 ("C-s" . save-buffer)
-	 ("C-p" . print-buffer)
-	 ("C-a" . wakib-select-line-block-all)
-	 ("C-+" . text-scale-increase)
-	 ("C-=" . text-scale-increase)
-	 ("C--" . text-scale-decrease)
-	 ("C-j" . wakib-previous)
-	 ("C-l" . wakib-next)
-	 ("M-s" . other-window)
-	 ("M-M" . goto-line)
-	 ("M-4" . split-window-right)
-	 ("M-$" . split-window-below)
-	 ("M-3" . delete-other-windows)
-	 ("M-2" . delete-window)
-	 ("M-e" . backward-kill-word)
-	 ("M-r" . kill-word)
-	 ("M-a" . execute-extended-command)
-	 ("M-<f4>" . save-buffers-kill-terminal)
-	 ("M-d" . delete-backward-char)
-	 ("M-f" . delete-char)
-	 ("M-a" . kill-whole-line)
- 	 ("M-SPC" . set-mark-command)
-	 ("M-S-SPC" . set-rectangular-region-anchor)
-	 ("S-RET" . wakib-insert-newline-before)
-	 ("C-b" . switch-to-buffer)
-	 ("M-X" . pp-eval-expression)
-	 ("<escape>" . keyboard-quit) ;; should quit minibuffer too
-	 ("M-m" . goto-line))
+    ("M-l" . forward-char)
+    ("M-i" . previous-line)
+    ("M-k" . next-line)
+    ("M-u" . backward-word)
+    ("M-o" . forward-word)
+    ("M-U" . wakib-beginning-line-or-block)
+    ("M-O" . wakib-end-line-or-block)
+    ("M-I" . scroll-down)
+    ("M-K" . scroll-up)
+    ("M-n" . beginning-of-buffer)
+    ("M-N" . end-of-buffer)
+    ("C-n" . wakib-new-empty-buffer)
+    ("C-o" . find-file)
+    ("C-S-o" . revert-buffer)
+    ("C-w" . kill-this-buffer)
+    ("C-q" . save-buffers-kill-terminal)
+    ("C-<next>" . next-buffer)
+    ("C-<prior>" . previous-buffer)
+    ("C-v" . yank)
+    ("C-z" . undo)
+    ("C-f" . isearch-forward)
+    ("C-S-f" . isearch-backward)
+    ("C-r" . query-replace)
+    ("C-S-r" . query-replace-regexp)
+    ("C-s" . save-buffer)
+    ("C-p" . print-buffer)
+    ("C-a" . wakib-select-line-block-all)
+    ("C-+" . text-scale-increase)
+    ("C-=" . text-scale-increase)
+    ("C--" . text-scale-decrease)
+    ("C-j" . wakib-previous)
+    ("C-l" . wakib-next)
+    ("M-s" . other-window)
+    ("M-M" . goto-line)
+    ("M-4" . split-window-right)
+    ("M-$" . split-window-below)
+    ("M-3" . delete-other-windows)
+    ("M-2" . delete-window)
+    ("M-e" . backward-kill-word)
+    ("M-r" . kill-word)
+    ("M-S-e" . wakib-backward-kill-line)
+    ("M-S-r" . kill-line)
+    ("M-w" . kill-whole-line)
+    ("M-a" . execute-extended-command)
+    ("M-<f4>" . save-buffers-kill-emacs)
+    ("M-d" . delete-backward-char)
+    ("M-f" . delete-char)
+    ("M-a" . wakib-select-line-block-all)
+    ("M-SPC" . set-mark-command)
+    ("M-S-SPC" . set-rectangular-region-anchor)
+    ("S-RET" . wakib-insert-newline-before)
+    ("C-b" . switch-to-buffer)
+    ("M-X" . pp-eval-expression)
+    ("<escape>" . keyboard-quit) ;; should quit minibuffer too
+    ("M-m" . goto-line))
   "List of all wakib mode keybindings.")
 
 
@@ -293,13 +300,11 @@ Then add C-d and C-e to KEYMAP"
 	     `((wakib-override-mode . ,wakib-override-mode-map)))
 
 
-
 (defun wakib-global-mode ()
   "Enable wakib bindings globally. This cannot be disabled with negative argument"
   (interactive)
   (wakib-define-keys (current-global-map) wakib-keylist)
   (setq wakib-override-mode t))
-
 
 
 ;; Modifying other modules
@@ -323,8 +328,6 @@ Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :init-value nil
   :global t
   (setq wakib-override-mode wakib-mode))
-
-
 
 (provide 'wakib-mode)
 

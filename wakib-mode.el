@@ -54,17 +54,47 @@ definition.  This idea came from general.el"
 This function ignores the overriding maps that will be used to override
 KEY"
   (let ((active-maps nil))
-	 (mapc (lambda (x)
-				(when (and (symbolp (car x)) (symbol-value (car x)))
-				  (add-to-list 'active-maps  (lookup-key (cdr x) (kbd key)))))
-			 minor-mode-map-alist )
-	 (make-composed-keymap active-maps)))
+    (mapc (lambda (x)
+	    (when (and (symbolp (car x)) (symbol-value (car x)))
+	      (add-to-list 'active-maps  (lookup-key (cdr x) (kbd key)))))
+	  minor-mode-map-alist )
+    (make-composed-keymap active-maps)))
 
 
 ;; might need to do keymap inheretence to perserve priority
 (defun wakib-key-binding (key)
   "Return the full keymap bindings of KEY."
   (make-composed-keymap (list (wakib-minor-mode-key-binding key) (local-key-binding (kbd key)) (global-key-binding (kbd key)))))
+
+
+(defun wakib-function-lookup(fun)
+  "Lookup FUN in C-d C-e maps and return shortcut in string format"
+  (let ((ce-key (car (where-is-internal fun (list (wakib-key-binding "C-x")))))
+	(cd-key (car (where-is-internal fun (list (wakib-key-binding "C-c"))))))
+    (cond (cd-key (concat "C-d " (key-description cd-key)))
+	  (ce-key (concat "C-e " (key-description ce-key)))
+	  (t nil))))
+
+(defun wakib--get-command-keys (hash str start)
+  "Add all C-d C-e matches in string to hash"
+  (if (string-match "\\\\\\[\\([^\]]*\\)\\]" str start)
+      (let* ((match (intern (match-string 1 str)))
+	     (match-pos (match-beginning 0))
+	     (shortcut (wakib-function-lookup match)))
+	(puthash match shortcut hash)
+	(wakib--get-command-keys hash str (+ match-pos 1)))
+    hash))
+
+(defun wakib-substitute-command-keys (orig-fun &rest args)
+  "Advice for substitute command keys"
+  (let* ((hash (wakib--get-command-keys (make-hash-table) (car args) 0))
+	(str (replace-regexp-in-string "\\\\\\[\\([^\]]*\\)\\]"
+				       (lambda (match)
+					 (let ((key (gethash (intern (substring match 2 -1)) hash)))
+					   (if key key match)))
+				       (car args) t t)))
+    (apply orig-fun (list str))))
+
 
 ;; Commands
 

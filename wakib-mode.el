@@ -87,6 +87,9 @@ KEY"
 
 (defun wakib-substitute-command-keys (orig-fun &rest args)
   "Advice for substitute command keys"
+  ;; Put replacements in hash first because doing key lookup during
+  ;; replace-regexp-in-string resets the match and causes the replace
+  ;; step to work incorrectly
   (let* ((hash (wakib--get-command-keys (make-hash-table) (car args) 0))
 	(str (replace-regexp-in-string "\\\\\\[\\([^\]]*\\)\\]"
 				       (lambda (match)

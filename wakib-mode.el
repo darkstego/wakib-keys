@@ -66,7 +66,6 @@ KEY"
   "Return the full keymap bindings of KEY."
   (make-composed-keymap (list (wakib-minor-mode-key-binding key) (local-key-binding (kbd key)) (global-key-binding (kbd key)))))
 
-
 (defun wakib-function-lookup(fun)
   "Lookup FUN in C-d C-e maps and return shortcut in string format"
   (let ((ce-key (car (where-is-internal fun (list (wakib-key-binding "C-x")))))
@@ -105,16 +104,20 @@ KEY"
   "Perform context aware Previous function.
 ARG used as repeat function for interactive"
   (interactive "p")
+  ;; if region active
   (cond ((eq last-command 'yank)
-			(yank-pop arg))
-		  ))
+	 (yank-pop arg))
+	((use-region-p)
+	 (exchange-point-and-mark))))
 
 (defun wakib-next (&optional arg)
   "Perform context aware Next function.
 ARG used as repeat for interactive function."
   (interactive "p")
   (cond ((eq last-command 'yank)
-			(yank-pop (- arg)))))
+	 (yank-pop (- arg)))
+	((use-region-p)
+	 (exchange-point-and-mark))))
 
 
 
@@ -122,9 +125,12 @@ ARG used as repeat for interactive function."
 (defun wakib-select-line-block-all ()
   "Select line.  Expands to block and then entire buffer."
   (interactive)
-  (unless (mark) (set-mark (point)))
-  (let ((p1 (region-beginning))
-		  (p2 (region-end))
+  (let ((p1 (if (region-active-p)
+		(region-beginning)
+	      (point)))
+	(p2 (if (region-active-p)
+		(region-end)
+	      (point)))
 		  (x1)
 		  (x2)
 		  (end-p))
@@ -251,7 +257,7 @@ It returns the buffer."
 ;; no need expose any of these functions or variables
 ;; except for wakib-mode-map
 
-(defvar wakib-mode-map (make-sparse-keymap) "Key bindings for Wakib minor mode.")
+(defvar wakib-overriding-mode-map (make-sparse-keymap) "Key bindings for Wakib minor mode.")
 
 (defun wakib-define-keys (keymap keylist)
   "Add to KEYMAP all keys in KEYLIST.  
@@ -283,6 +289,8 @@ Then add C-d and C-e to KEYMAP"
     ("C-q" . save-buffers-kill-terminal)
     ("C-<next>" . next-buffer)
     ("C-<prior>" . previous-buffer)
+    ("C-c" . kill-ring-save)
+    ("C-x" . kill-region)
     ("C-v" . yank)
     ("C-z" . undo)
     ("C-f" . isearch-forward)
@@ -322,24 +330,12 @@ Then add C-d and C-e to KEYMAP"
   "List of all wakib mode keybindings.")
 
 
-(wakib-define-keys wakib-mode-map wakib-keylist)
-
-(defvar wakib-override-mode nil)
-(defvar wakib-override-mode-map (make-sparse-keymap) "Keybinding for override keys.")
-(define-key wakib-override-mode-map (kbd "C-c") 'kill-ring-save)
-(define-key wakib-override-mode-map (kbd "C-x") 'kill-region)
+(wakib-define-keys wakib-overriding-mode-map wakib-keylist)
 (add-to-list 'emulation-mode-map-alists
-	     `((wakib-override-mode . ,wakib-override-mode-map)))
-
-
-(defun wakib-global-mode ()
-  "Enable wakib bindings globally. This cannot be disabled with negative argument"
-  (interactive)
-  (wakib-define-keys (current-global-map) wakib-keylist)
-  (setq wakib-override-mode t))
-
+	     `((wakib-mode . ,wakib-overriding-mode-map)))
 
 ;; Modifying other modules
+;; TODO remap
 (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "C-S-f") 'isearch-repeat-backward)
 (define-key isearch-mode-map (kbd "C-l") 'isearch-repeat-forward)
@@ -356,7 +352,6 @@ just to use their editor.
 
 Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :lighter " Wakib"
-  :keymap wakib-mode-map
   :init-value nil
   :global t
   (setq wakib-override-mode wakib-mode))

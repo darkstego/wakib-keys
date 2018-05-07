@@ -106,39 +106,47 @@ KEY"
       (mapc (lambda (item)
 	      (when (and (listp item)
 			 (eq (car item) 'menu-bar))
-		(mapc (lambda (i)
-			(wakib--update-keymap i (symbol-value mode-map))) item))) (symbol-value mode-map))
+		(wakib-update-menu-map item (symbol-value mode-map))))
+	      (symbol-value mode-map))
       (put mode-map 'wakib-updated t))))
 
+(defun wakib-update-menu-map (menu-map command-map &optional prefix)
+  "Update menu-map shortcuts from given COMMAND-MAP."
+  (mapc (lambda (i)
+	  (wakib--update-keymap i command-map prefix)) menu-map))
 
-(defun wakib--update-keymap (item keymaps)
+
+(defun wakib--update-keymap (item keymaps &optional prefix)
   "Update Shortcuts in KEYMAP"
   (cond ((and (listp item)
 	      (listp (cdr (last item)))
 	      (keymapp (nth 3 item)))
 	 (mapc (lambda (i)
-		 (wakib--update-keymap i keymaps))  (nth 3 item)))
+		 (wakib--update-keymap i keymaps prefix))  (nth 3 item)))
 	((and (listp item)
 	      (listp (cdr (last item)))
 	      (nth 3 item))
-	 (wakib--update-menu-item-keys item keymaps))))
+	 (wakib--update-menu-item-keys item keymaps prefix))))
 
 
-(defun wakib--update-menu-item-keys (menu-item-list keymaps)
+(defun wakib--update-menu-item-keys (menu-item-list keymaps &optional prefix)
   "Change the given menu item to point to correct shortcut"
   (let* ((binding (nth 3 menu-item-list))
 	(tail (nthcdr 3 menu-item-list))
 	(key (where-is-internal binding keymaps t)))
     (when key
       (let ((shortcut (key-description key)))
-	(cond ((string-match-p "^C-c" shortcut)
-	       (setcdr tail (plist-put (cdr tail)
-				       :keys (replace-regexp-in-string "^C-c" "C-d" shortcut))))
-	      ((string-match-p "^C-x" shortcut)
-	       (setcdr tail (plist-put (cdr tail)
-					:keys (replace-regexp-in-string "^C-x" "C-e" shortcut))))
-	      (t (setcdr tail (plist-put (cdr tail)
-				      :key-sequence key))))))))
+	(cond
+	 (prefix
+	  (setcdr tail (plist-put (cdr tail)
+				  :keys (concat prefix " " shortcut))))
+	 ((string-match-p "^\\(C-c\\|C-x\\)" shortcut)
+	  (setcdr tail (plist-put
+			(cdr tail)
+			:keys (replace-regexp-in-string "^C-c" "C-d"
+							(replace-regexp-in-string "^C-x" "C-e" shortcut)))))
+	 (t (setcdr tail (plist-put (cdr tail)
+				    :key-sequence key))))))))
 
 
 ;; Commands

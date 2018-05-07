@@ -98,6 +98,49 @@ KEY"
     (apply orig-fun (list str))))
 
 
+(defun wakib-update-major-mode-map ()
+  "Fix Shortcuts in menu-bar of MODE-MAP"
+  (let ((mode-map (intern (concat (symbol-name major-mode) "-map"))))
+    (when (and (boundp mode-map)
+	       (not (get mode-map 'wakib-updated)))
+      (mapc (lambda (item)
+	      (when (and (listp item)
+			 (eq (car item) 'menu-bar))
+		(mapc (lambda (i)
+			(wakib--update-keymap i (symbol-value mode-map))) item))) (symbol-value mode-map))
+      (put mode-map 'wakib-updated t))))
+
+
+(defun wakib--update-keymap (item keymaps)
+  "Update Shortcuts in KEYMAP"
+  (cond ((and (listp item)
+	      (listp (cdr (last item)))
+	      (keymapp (nth 3 item)))
+	 (mapc (lambda (i)
+		 (wakib--update-keymap i keymaps))  (nth 3 item)))
+	((and (listp item)
+	      (listp (cdr (last item)))
+	      (nth 3 item))
+	 (wakib--update-menu-item-keys item keymaps))))
+
+
+(defun wakib--update-menu-item-keys (menu-item-list keymaps)
+  "Change the given menu item to point to correct shortcut"
+  (let* ((binding (nth 3 menu-item-list))
+	(tail (nthcdr 3 menu-item-list))
+	(key (where-is-internal binding keymaps t)))
+    (when key
+      (let ((shortcut (key-description key)))
+	(cond ((string-match-p "^C-c" shortcut)
+	       (setcdr tail (plist-put (cdr tail)
+				       :keys (replace-regexp-in-string "^C-c" "C-d" shortcut))))
+	      ((string-match-p "^C-x" shortcut)
+	       (setcdr tail (plist-put (cdr tail)
+					:keys (replace-regexp-in-string "^C-x" "C-e" shortcut))))
+	      (t (setcdr tail (plist-put (cdr tail)
+				      :key-sequence key))))))))
+
+
 ;; Commands
 
 (defun wakib-previous (&optional arg)
@@ -313,8 +356,8 @@ Then add C-d and C-e to KEYMAP"
     ("M-2" . delete-window)
     ("M-e" . backward-kill-word)
     ("M-r" . kill-word)
-    ("M-S-e" . wakib-backward-kill-line)
-    ("M-S-r" . kill-line)
+    ("M-E" . wakib-backward-kill-line)
+    ("M-R" . kill-line)
     ("M-w" . kill-whole-line)
     ("M-<f4>" . save-buffers-kill-emacs)
     ("M-d" . delete-backward-char)
@@ -325,8 +368,7 @@ Then add C-d and C-e to KEYMAP"
     ("S-RET" . wakib-insert-newline-before)
     ("C-b" . switch-to-buffer)
     ("M-X" . pp-eval-expression)
-    ("<escape>" . keyboard-quit) ;; should quit minibuffer too
-    ("M-m" . goto-line))
+    ("<escape>" . keyboard-quit)) ;; should quit minibuffer 
   "List of all wakib mode keybindings.")
 
 

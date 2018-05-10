@@ -309,6 +309,7 @@ It returns the buffer."
 ;; except for wakib-mode-map
 
 (defvar wakib-overriding-mode-map (make-sparse-keymap) "Key bindings for Wakib minor mode.")
+(defvar wakib-mode-map (make-sparse-keymap) "Keymap used for menu-bar items")
 
 (defun wakib-define-keys (keymap keylist)
   "Add to KEYMAP all keys in KEYLIST.  
@@ -321,8 +322,8 @@ Then add C-d and C-e to KEYMAP"
   (define-key keymap (kbd "C-d") (wakib-dynamic-binding "C-c")))
 
 (defvar wakib-keylist
-  '(("M-j" . backward-char)
-    ("M-l" . forward-char)
+  '(("M-j" . left-char)
+    ("M-l" . right-char)
     ("M-i" . previous-line)
     ("M-k" . next-line)
     ("M-u" . backward-word)
@@ -403,6 +404,7 @@ just to use their editor.
 Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :lighter " Wakib"
   :init-value nil
+  :keymap wakib-mode-map
   :global t
   (setq wakib-override-mode wakib-mode))
 

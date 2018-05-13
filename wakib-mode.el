@@ -61,6 +61,12 @@ KEY"
     (make-composed-keymap active-maps)))
 
 
+(defun wakib-current-minor-mode-maps ()
+  "Return keymaps of all current active minor modes (without overriding modes)"
+  (delete nil (mapcar (lambda (x)
+	    (when (and (symbolp (car x)) (symbol-value (car x)))
+	      (cdr x))) minor-mode-map-alist)))
+
 ;; might need to do keymap inheretence to perserve priority
 (defun wakib-key-binding (key)
   "Return the full keymap bindings of KEY."
@@ -99,16 +105,22 @@ KEY"
 
 
 (defun wakib-update-major-mode-map ()
-  "Fix Shortcuts in menu-bar of MODE-MAP"
-  (let ((mode-map (intern (concat (symbol-name major-mode) "-map"))))
-    (when (and (boundp mode-map)
-	       (not (get mode-map 'wakib-updated)))
-      (mapc (lambda (item)
-	      (when (and (listp item)
-			 (eq (car item) 'menu-bar))
-		(wakib-update-menu-map item (symbol-value mode-map))))
-	      (symbol-value mode-map))
-      (put mode-map 'wakib-updated t))))
+  "Fix Shortcuts in menu-bar of major mode map"
+  (let ((mode-map (current-local-map)))
+    (when (and (keymapp mode-map)
+	       (not (get major-mode 'wakib-updated)))
+      (wakib-update-menu-map (lookup-key mode-map [menu-bar]) mode-map)
+      (put major-mode 'wakib-updated t))))
+
+(defun wakib-update-minor-mode-maps ()
+  "Fix shortcts in menu-bar of minor mode maps"
+  (let ((map-list (current-minor-mode-maps)))
+    (mapc (lambda (keymap)
+	    (wakib-update-menu-map (lookup-key keymap [menu-bar])
+				   (wakib-current-minor-mode-maps))
+      ) map-list)))
+
+
 
 (defun wakib-update-menu-map (menu-map command-map &optional prefix)
   "Update menu-map shortcuts from given COMMAND-MAP."
@@ -118,35 +130,57 @@ KEY"
 
 (defun wakib--update-keymap (item keymaps &optional prefix)
   "Update Shortcuts in KEYMAP"
-  (cond ((and (listp item)
-	      (listp (cdr (last item)))
-	      (keymapp (nth 3 item)))
-	 (mapc (lambda (i)
-		 (wakib--update-keymap i keymaps prefix))  (nth 3 item)))
-	((and (listp item)
-	      (listp (cdr (last item)))
-	      (nth 3 item))
-	 (wakib--update-menu-item-keys item keymaps prefix))))
+  (when (and (listp item)
+	     (listp (cdr (last item))))
+    (cond ((keymapp item)
+	   (mapc (lambda (i) (wakib--update-keymap i keymaps prefix)) item))
+	  ((and (stringp (cadr item))
+		(keymapp (cddr item)))
+	   (mapc (lambda (i) (wakib--update-keymap i keymaps prefix)) (cddr item)))
+	  ((and (stringp (cadr item))
+		(stringp (car (cddr item)))
+		(keymapp (cdr (cddr item))))
+	   (mapc (lambda (i) (wakib--update-keymap i keymaps prefix)) (cdr (cddr item))))
+	  ((and (eq 'menu-item (cadr item))
+		(keymapp (nth 3 item)))
+	   (mapc (lambda (i) (wakib--update-keymap i keymaps prefix)) (nth 3 item)))
+	  ((and (eq 'menu-item (cadr item))
+		(nth 3 item))
+	   (wakib--update-menu-item-keys item keymaps prefix)))))
 
 
 (defun wakib--update-menu-item-keys (menu-item-list keymaps &optional prefix)
   "Change the given menu item to point to correct shortcut"
   (let* ((binding (nth 3 menu-item-list))
-	(tail (nthcdr 3 menu-item-list))
-	(key (where-is-internal binding keymaps t)))
+	 (menu-item-copy (copy-sequence (cdr menu-item-list)))
+	(tail (nthcdr 2 menu-item-copy))
+	(key (where-is-internal binding keymaps t))
+	(keys (plist-get (cdr tail) :keys)))
+    (when (and keys
+	       (string-match-p "^\\(C-c\\|C-x\\)" keys))
+      (setcdr tail (plist-put
+			(cdr tail)
+			:keys (replace-regexp-in-string
+			       "^C-c" "C-d"
+			       (replace-regexp-in-string "^C-x" "C-e" keys))))
+      (setcdr menu-item-list menu-item-copy))
     (when key
       (let ((shortcut (key-description key)))
 	(cond
 	 (prefix
 	  (setcdr tail (plist-put (cdr tail)
-				  :keys (concat prefix " " shortcut))))
+				  :keys (concat prefix " " shortcut)))
+	  (setcdr menu-item-list menu-item-copy))
 	 ((string-match-p "^\\(C-c\\|C-x\\)" shortcut)
 	  (setcdr tail (plist-put
 			(cdr tail)
 			:keys (replace-regexp-in-string "^C-c" "C-d"
-							(replace-regexp-in-string "^C-x" "C-e" shortcut)))))
+							(replace-regexp-in-string "^C-x" "C-e" shortcut))))
+	  (setcdr menu-item-list menu-item-copy))
+	 ;; since we already searched, memoize the key as a suggestion
 	 (t (setcdr tail (plist-put (cdr tail)
-				    :key-sequence key))))))))
+				    :key-sequence key))
+	    (setcdr menu-item-list menu-item-copy)))))))
 
 
 ;; Commands
@@ -328,6 +362,8 @@ Then add C-d and C-e to KEYMAP"
     ("M-k" . next-line)
     ("M-u" . backward-word)
     ("M-o" . forward-word)
+    ("M-;" . wakib-next)
+    ("M-:" . wakib-previous)
     ("M-U" . wakib-beginning-line-or-block)
     ("M-O" . wakib-end-line-or-block)
     ("M-I" . scroll-down-command)
@@ -389,8 +425,8 @@ Then add C-d and C-e to KEYMAP"
 ;; TODO remap
 (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "C-S-f") 'isearch-repeat-backward)
-(define-key isearch-mode-map (kbd "C-l") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "C-j") 'isearch-repeat-backward)
+(define-key isearch-mode-map [remap wakib-next] 'isearch-repeat-forward)
+(define-key isearch-mode-map [remap wakib-previous] 'isearch-repeat-backward)
 (define-key isearch-mode-map (kbd "C-v") 'isearch-yank-kill)
 
 

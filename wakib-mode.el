@@ -338,9 +338,6 @@ It returns the buffer."
   (kill-line 0))
 
 ;; Setup for keymap
-;; I should probably move this into a let statement,
-;; no need expose any of these functions or variables
-;; except for wakib-mode-map
 
 (defvar wakib-overriding-mode-map (make-sparse-keymap) "Key bindings for Wakib minor mode.")
 (defvar wakib-mode-map (make-sparse-keymap) "Keymap used for menu-bar items")
@@ -398,7 +395,7 @@ Then add C-d and C-e to KEYMAP"
     ("M-4" . split-window-right)
     ("M-$" . split-window-below)
     ("M-3" . delete-other-windows)
-    ("M-2" . delete-window)
+    ("M-#" . delete-window)
     ("M-e" . backward-kill-word)
     ("M-r" . kill-word)
     ("M-E" . wakib-backward-kill-line)

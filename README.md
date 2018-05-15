@@ -1,4 +1,4 @@
-# Wakib-mode
+# Wakib-keys
 
 Emacs minor mode that provides a modern, efficient and easy
 to learn keybindings. 
@@ -89,7 +89,7 @@ This is just the start, I hope to expand on it very soon
 | Alt + Shift + 4 | Split Window Below |
 | Alt + S         | Switch Window      |
 | Ctrl + B        | Swith to Buffer    |
-| Alt + 2         | Close Pane         |
+| Alt + Shift + 3 | Close Pane         |
 | Alt + 3         | Close Other Panes  |
 
 ### Emacs Keys
@@ -116,17 +116,9 @@ in your init.el file
 
 
 
-## Thanks
+## Other keybingings
 
-This minor mode is heavily influenced by Ergoemacs mode. So movement is by
-using Alt + ijkl keys. I hope to finish up the keybindings soon. This is
-modifier based mode. If you are looking for a modal keybinding in the same
-vein, check out xah-fly-keys.
+Other projects that provide different keybindings for Emacs include
 
-Also props to the general.el project for providing the solution to
-dynamically bind prefix keys. If you simply want to copy the C-c key
-to another location, while keeping C-c as is, check them out, they provide a
-an easy way of doing it. Or just check out the Macro shown in my mode.
-
-I am very very new to elisp, and emacs so any suggestions or advice is
-greatly appreciated.
+Modifier based: [Ergoemacs](https://ergoemacs.github.io/)
+Modal: [Xah-Fly-Keys](https://github.com/xahlee/xah-fly-keys)

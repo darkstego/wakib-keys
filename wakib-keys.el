@@ -62,7 +62,7 @@ KEY"
 
 
 (defun wakib-current-minor-mode-maps ()
-  "Return keymaps of all current active minor modes (without overriding modes)"
+  "Return keymaps of all current active minor modes (without overriding modes)."
   (delete nil (mapcar (lambda (x)
 	    (when (and (symbolp (car x)) (symbol-value (car x)))
 	      (cdr x))) minor-mode-map-alist)))
@@ -81,7 +81,7 @@ KEY"
 	  (t nil))))
 
 (defun wakib--get-command-keys (hash str start)
-  "Add all C-d C-e matches in string to hash"
+  "Add all C-d C-e matches in string to hash."
   (if (string-match "\\\\\\[\\([^\]]*\\)\\]" str start)
       (let* ((match (intern (match-string 1 str)))
 	     (match-pos (match-beginning 0))
@@ -91,7 +91,7 @@ KEY"
     hash))
 
 (defun wakib-substitute-command-keys (orig-fun &rest args)
-  "Advice for substitute command keys"
+  "Advice for substitute command keys."
   ;; Put replacements in hash first because doing key lookup during
   ;; replace-regexp-in-string resets the match and causes the replace
   ;; step to work incorrectly
@@ -105,7 +105,7 @@ KEY"
 
 
 (defun wakib-update-major-mode-map ()
-  "Fix Shortcuts in menu-bar of major mode map"
+  "Fix Shortcuts in menu-bar of major mode map."
   (let ((mode-map (current-local-map)))
     (when (and (keymapp mode-map)
 	       (not (get major-mode 'wakib-updated)))
@@ -113,7 +113,7 @@ KEY"
       (put major-mode 'wakib-updated t))))
 
 (defun wakib-update-minor-mode-maps ()
-  "Fix shortcts in menu-bar of minor mode maps"
+  "Fix shortcts in menu-bar of minor mode maps."
   (let ((map-list (current-minor-mode-maps)))
     (mapc (lambda (keymap)
 	    (wakib-update-menu-map (lookup-key keymap [menu-bar])
@@ -123,13 +123,14 @@ KEY"
 
 
 (defun wakib-update-menu-map (menu-map command-map &optional prefix)
-  "Update menu-map shortcuts from given COMMAND-MAP."
+  "Update MENU-MAP shortcuts from given COMMAND-MAP.
+Optional argument PREFIX adds prefix to command."
   (mapc (lambda (i)
 	  (wakib--update-keymap i command-map prefix)) menu-map))
 
 
 (defun wakib--update-keymap (item keymaps &optional prefix)
-  "Update Shortcuts in KEYMAP"
+  "Update Shortcuts in KEYMAP."
   (when (and (listp item)
 	     (listp (cdr (last item))))
     (cond ((keymapp item)
@@ -150,7 +151,7 @@ KEY"
 
 
 (defun wakib--update-menu-item-keys (menu-item-list keymaps &optional prefix)
-  "Change the given menu item to point to correct shortcut"
+  "Change the given menu item to point to correct shortcut."
   (let* ((binding (nth 3 menu-item-list))
 	 (menu-item-copy (copy-sequence (cdr menu-item-list)))
 	(tail (nthcdr 2 menu-item-copy))
@@ -340,10 +341,10 @@ It returns the buffer."
 ;; Setup for keymap
 
 (defvar wakib-keys-overriding-map (make-sparse-keymap) "Key bindings for Wakib minor mode.")
-(defvar wakib-keys-map (make-sparse-keymap) "Keymap used for menu-bar items")
+(defvar wakib-keys-map (make-sparse-keymap) "Keymap used for menu-bar items.")
 
 (defun wakib-define-keys (keymap keylist)
-  "Add to KEYMAP all keys in KEYLIST.  
+  "Add to KEYMAP all keys in KEYLIST.
 Then add C-d and C-e to KEYMAP"
   (interactive)
   (mapc (lambda (pair)
@@ -410,7 +411,7 @@ Then add C-d and C-e to KEYMAP"
     ("S-RET" . wakib-insert-newline-before)
     ("C-b" . switch-to-buffer)
     ("M-X" . pp-eval-expression)
-    ("<escape>" . keyboard-quit)) ;; should quit minibuffer 
+    ("<escape>" . keyboard-quit)) ;; should quit minibuffer
   "List of all wakib mode keybindings.")
 
 
@@ -438,6 +439,7 @@ Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :lighter " Wakib"
   :init-value nil
   :keymap wakib-keys-map
+  :require 'wakib-keys
   :global t)
 
 (provide 'wakib-keys)

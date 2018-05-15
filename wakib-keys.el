@@ -1,7 +1,7 @@
-;;; wakib-mode.el --- Minor Mode for Modern Keybindings -*- lexical-binding: t -*-
+;;; wakib-keys.el --- Minor Mode for Modern Keybindings -*- lexical-binding: t -*-
 
 ;; Author: Abdulla Bubshait
-;; URL: https://github.com/darkstego/wakib-mode
+;; URL: https://github.com/darkstego/wakib-keys/
 ;; Created: 6 April 2018
 ;; Keywords: convenience, keybindings, keys
 ;; License: GPL v3
@@ -340,10 +340,10 @@ It returns the buffer."
 ;; Setup for keymap
 ;; I should probably move this into a let statement,
 ;; no need expose any of these functions or variables
-;; except for wakib-mode-map
+;; except for wakib-keys-map
 
-(defvar wakib-overriding-mode-map (make-sparse-keymap) "Key bindings for Wakib minor mode.")
-(defvar wakib-mode-map (make-sparse-keymap) "Keymap used for menu-bar items")
+(defvar wakib-keys-overriding-map (make-sparse-keymap) "Key bindings for Wakib minor mode.")
+(defvar wakib-keys-map (make-sparse-keymap) "Keymap used for menu-bar items")
 
 (defun wakib-define-keys (keymap keylist)
   "Add to KEYMAP all keys in KEYLIST.  
@@ -417,9 +417,9 @@ Then add C-d and C-e to KEYMAP"
   "List of all wakib mode keybindings.")
 
 
-(wakib-define-keys wakib-overriding-mode-map wakib-keylist)
+(wakib-define-keys wakib-keys-overriding-map wakib-keylist)
 (add-to-list 'emulation-mode-map-alists
-	     `((wakib-mode . ,wakib-overriding-mode-map)))
+	     `((wakib-keys . ,wakib-keys-overriding-map)))
 
 ;; Modifying other modules
 ;; TODO remap
@@ -430,7 +430,7 @@ Then add C-d and C-e to KEYMAP"
 (define-key isearch-mode-map (kbd "C-v") 'isearch-yank-kill)
 
 
-(define-minor-mode wakib-mode
+(define-minor-mode wakib-keys
   "This mode brings modern style keybindings to Emacs.
 Major changes is proper CUA key bindings by moving C-c and C-x to
 C-d and C-e respectively. This allow access to all the keybindings of
@@ -440,11 +440,10 @@ just to use their editor.
 Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :lighter " Wakib"
   :init-value nil
-  :keymap wakib-mode-map
-  :global t
-  (setq wakib-override-mode wakib-mode))
+  :keymap wakib-keys-map
+  :global t)
 
-(provide 'wakib-mode)
+(provide 'wakib-keys)
 
 
-;;; wakib-mode.el ends here
+;;; wakib-keys.el ends here

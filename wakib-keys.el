@@ -27,8 +27,10 @@
 
 ;;; Commentary:
 
-;; This package aims to provide new keybindings for basic Emacs
-;; functions.  The goal of this package is to provide
+;; This package aims to provide new keybindinfgs for basic Emacs
+;; functions.  The goal of this package is to provide an accesible
+;; emacs starter kit that could be used by anyone out of the box
+;; without the need for tutorials, but also be feature complete.
 
 ;;; Code:
 
@@ -414,7 +416,8 @@ Then add C-d and C-e to KEYMAP"
     ("S-RET" . wakib-insert-newline-before)
     ("C-b" . switch-to-buffer)
     ("M-X" . pp-eval-expression)
-    ("<escape>" . keyboard-quit)) ;; should quit minibuffer
+    ("<escape>" . keyboard-quit)
+    ("ESC" . keyboard-quit)) ;; should quit minibuffer
   "List of all wakib mode keybindings.")
 
 

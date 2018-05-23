@@ -416,8 +416,7 @@ Then add C-d and C-e to KEYMAP"
     ("S-RET" . wakib-insert-newline-before)
     ("C-b" . switch-to-buffer)
     ("M-X" . pp-eval-expression)
-    ("<escape>" . keyboard-quit)
-    ("ESC" . keyboard-quit)) ;; should quit minibuffer
+    ("<escape>" . keyboard-quit)) ;; should quit minibuffer
   "List of all wakib mode keybindings.")
 
 

@@ -432,7 +432,7 @@ Then add C-d and C-e to KEYMAP"
 (define-key isearch-mode-map [remap wakib-previous] 'isearch-repeat-backward)
 (define-key isearch-mode-map (kbd "C-v") 'isearch-yank-kill)
 
-
+;;;###autoload
 (define-minor-mode wakib-keys
   "This mode brings modern style keybindings to Emacs.
 Major changes is proper CUA key bindings by moving C-c and C-x to

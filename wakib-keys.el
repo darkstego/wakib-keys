@@ -424,13 +424,6 @@ Then add C-d and C-e to KEYMAP"
 (add-to-list 'emulation-mode-map-alists
 	     `((wakib-keys . ,wakib-keys-overriding-map)))
 
-;; Modifying other modules
-;; TODO remap
-(define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "C-S-f") 'isearch-repeat-backward)
-(define-key isearch-mode-map [remap wakib-next] 'isearch-repeat-forward)
-(define-key isearch-mode-map [remap wakib-previous] 'isearch-repeat-backward)
-(define-key isearch-mode-map (kbd "C-v") 'isearch-yank-kill)
 
 ;;;###autoload
 (define-minor-mode wakib-keys

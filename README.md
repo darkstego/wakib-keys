@@ -1,7 +1,8 @@
 # Wakib-keys
 
 Emacs minor mode that provides a modern, efficient and easy
-to learn keybindings. 
+to learn keybindings. For the full starter kit that is based
+on the concepts found here, please check out [wakib.d](https://github.com/darkstego/wakib.d).
 
 ## Features
 
@@ -38,9 +39,23 @@ All. That makes it easy to memorize shortcuts as similar behaviour are grouped t
 
 ## Bindings
 
+The following images show the general ideas behind the bindings. Please note that some of the bindings only exist through seperate packages available through the starter kit.
+
+CTRL
+-----
+![CTRL-KEYS](https://s15.postimg.cc/9bmeocmqz/Keyboard_CTRL_Layout.png "wakib-keys ctrl bindings")
+
+ALT
+---
+![ALT-KEYS](https://s15.postimg.cc/407i3k0nf/Keyboard_ALT_Layout.png "wakib-keys alt bindings")
+
+
+
 The tables below show the bindings
 This is just the start, I hope to expand on it very soon
 (I explicitly mention the shift key so don't get thrown off by letter capitalization)
+
+
 
 ### Movement
 
@@ -105,8 +120,9 @@ Yes, those have finally moved
 
 ## Installation
 
-Save the *wakib-mode.el* file anywhere in your emacs loadpath
-then place
+
+You can install wakib-keys from melpa or save the *wakib-keys.el* file
+anywhere in your emacs loadpath then place
 
 ```
 (require 'wakib-mode)
@@ -114,7 +130,11 @@ then place
 ```
 in your init.el file
 
+## Contribution
 
+If you have any issues, suggestions then please post them on the
+project's github page. I would like to hear what is working and what
+isn't with these keybindings.
 
 ## Other keybingings
 

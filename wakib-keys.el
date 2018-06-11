@@ -194,7 +194,7 @@ ARG used as repeat function for interactive"
   (interactive "p")
   ;; if region active
   (cond ((eq last-command 'yank)
-	 (yank-pop arg))
+	 (yank-pop (- arg)))
 	((use-region-p)
 	 (exchange-point-and-mark))))
 
@@ -203,7 +203,7 @@ ARG used as repeat function for interactive"
 ARG used as repeat for interactive function."
   (interactive "p")
   (cond ((eq last-command 'yank)
-	 (yank-pop (- arg)))
+	 (yank-pop arg))
 	((use-region-p)
 	 (exchange-point-and-mark))))
 

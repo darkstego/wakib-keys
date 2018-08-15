@@ -160,6 +160,7 @@ Optional argument PREFIX adds prefix to command."
 	(key (where-is-internal binding keymaps t))
 	(keys (plist-get (cdr tail) :keys)))
     (when (and keys
+	       (stringp keys)
 	       (string-match-p "^\\(C-c\\|C-x\\)" keys))
       (setcdr tail (plist-put
 			(cdr tail)

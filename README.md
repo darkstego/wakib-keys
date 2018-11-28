@@ -47,7 +47,7 @@ CTRL
 
 ALT
 ---
-![ALT-KEYS](https://s15.postimg.cc/407i3k0nf/Keyboard_ALT_Layout.png "wakib-keys alt bindings")
+![ALT-KEYS](https://i.postimg.cc/Fz0qq6DQ/Keyboard-ALT-Layout3.png "wakib-keys alt bindings")
 
 
 

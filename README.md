@@ -125,8 +125,8 @@ You can install wakib-keys from melpa or save the *wakib-keys.el* file
 anywhere in your emacs loadpath then place
 
 ```
-(require 'wakib-mode)
-(wakib-mode 1)
+(require 'wakib-keys)
+(wakib-keys 1)
 ```
 in your init.el file
 

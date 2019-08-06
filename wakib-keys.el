@@ -187,6 +187,23 @@ Optional argument PREFIX adds prefix to command."
 	    (setcdr menu-item-list menu-item-copy)))))))
 
 
+(defun wakib-find-overlays-specifying (prop)
+  "Find property among overlays at point"
+            (let ((overlays (overlays-at (point)))
+                  found)
+              (while overlays
+                (let ((overlay (car overlays)))
+                  (if (overlay-get overlay prop)
+                      (setq found (cons overlay found))))
+                (setq overlays (cdr overlays)))
+              found))
+
+
+(defun wakib-flyspell-correct (&optional arg)
+  "Correct previous word"
+  (interactive "p")
+  (flyspell-auto-correct-word))
+
 ;; Commands
 
 (defun wakib-previous (&optional arg)
@@ -197,7 +214,13 @@ ARG used as repeat function for interactive"
   (cond ((eq last-command 'yank)
 	 (yank-pop (- arg)))
 	((use-region-p)
-	 (exchange-point-and-mark))))
+	 (exchange-point-and-mark))
+	((and flyspell-mode
+	      (or (wakib-find-overlays-specifying 'flyspell-overlay)
+		  (save-excursion
+		    (backward-word)
+		    (wakib-find-overlays-specifying 'flyspell-overlay))))
+	 (wakib-flyspell-correct))))
 
 (defun wakib-next (&optional arg)
   "Perform context aware Next function.
@@ -206,7 +229,13 @@ ARG used as repeat for interactive function."
   (cond ((eq last-command 'yank)
 	 (yank-pop arg))
 	((use-region-p)
-	 (exchange-point-and-mark))))
+	 (exchange-point-and-mark))
+	((and flyspell-mode
+	      (or (wakib-find-overlays-specifying 'flyspell-overlay)
+		  (save-excursion
+		    (backward-word)
+		    (wakib-find-overlays-specifying 'flyspell-overlay))))
+	 (wakib-flyspell-correct))))
 
 
 

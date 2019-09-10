@@ -413,7 +413,7 @@ Then add C-d and C-e to KEYMAP"
     ("C-S-r" . query-replace-regexp)
     ("C-s" . save-buffer)
     ("C-p" . print-buffer)
-    ("C-a" . wakib-select-line-block-all)
+    ("C-a" . mark-whole-buffer)
     ("C-+" . text-scale-increase)
     ("C-=" . text-scale-increase)
     ("C--" . text-scale-decrease)

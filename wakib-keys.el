@@ -438,6 +438,8 @@ Then add C-d and C-e to KEYMAP"
     ("S-RET" . wakib-insert-newline-before)
     ("C-b" . switch-to-buffer)
     ("M-X" . pp-eval-expression)
+    ("<C-wheel-up>" . text-scale-increase)
+    ("<C-wheel-down>" . text-scale-decrease)
     ("<escape>" . keyboard-quit)) ;; should quit minibuffer
   "List of all wakib mode keybindings.")
 

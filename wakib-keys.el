@@ -383,7 +383,7 @@ Then add C-d and C-e to KEYMAP"
   (define-key keymap (kbd "C-d") (wakib-dynamic-binding "C-c")))
 
 (defvar wakib-keylist
-  '(("M-j" . left-char)
+  `(("M-j" . left-char)
     ("M-l" . right-char)
     ("M-i" . previous-line)
     ("M-k" . next-line)
@@ -444,8 +444,8 @@ Then add C-d and C-e to KEYMAP"
     ("<C-S-return>" . wakib-insert-line-before)
     ("C-b" . switch-to-buffer)
     ("M-X" . pp-eval-expression)
-    ("<C-wheel-up>" . text-scale-increase)
-    ("<C-wheel-down>" . text-scale-decrease)
+    (,(concat "<C-" (symbol-name mouse-wheel-down-event)  ">") . text-scale-increase)
+    (,(concat "<C-" (symbol-name mouse-wheel-up-event)  ">") . text-scale-decrease)
     ("<escape>" . keyboard-quit)) ;; should quit minibuffer
   "List of all wakib mode keybindings.")
 

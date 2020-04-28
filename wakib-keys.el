@@ -202,18 +202,11 @@ Optional argument PREFIX adds prefix to command."
   "Go through the output of describe bindings and replace C-c and C-x with C-d and C-e"
   (save-excursion
     (goto-char start-point)
-    (while (re-search-forward "^C-c" end-point t)
-      (replace-match "C-d"))
+    (while (re-search-forward "^C-c " end-point t)
+      (replace-match "C-d "))
     (goto-char start-point)
-    (while (re-search-forward "^C-x" end-point t)
-      (replace-match "C-e"))
-    (goto-char start-point)
-    ;; Undo the changes to C-c C-x in wakib
-    (re-search-forward (concat "wakib-keys[^" (string ?\f) "]+\n\\(C-d\\)") end-point t)
-    (replace-match "C-c" nil nil nil 1)
-    (goto-char start-point)
-    (re-search-forward (concat "wakib-keys[^" (string ?\f) "]+\n\\(C-e\\)") end-point t)
-    (replace-match "C-x" nil nil nil 1)))
+    (while (re-search-forward "^C-x " end-point t)
+      (replace-match "C-e "))))
 
 
 (defun wakib--describe-bindings-advice (orig-fun &rest args)

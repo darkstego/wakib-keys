@@ -198,23 +198,33 @@ Optional argument PREFIX adds prefix to command."
                 (setq overlays (cdr overlays)))
               found))
 
-(defun wakib--replace-describe-bindings-shortcuts (start-point end-point)
+
+(defun wakib--replace-in-region (regex rep start-point end-point)
   "Go through the output of describe bindings and replace C-c and C-x with C-d and C-e"
   (save-excursion
     (goto-char start-point)
-    (while (re-search-forward "^C-c " end-point t)
-      (replace-match "C-d "))
-    (goto-char start-point)
-    (while (re-search-forward "^C-x " end-point t)
-      (replace-match "C-e "))))
+    (while (re-search-forward regex end-point t)
+      (replace-match rep))))
 
-
-(defun wakib--describe-bindings-advice (orig-fun &rest args)
-  "Advice for describe-buffer-bindings to replace C-c and C-x"
+(defun wakib--describe-bindings-advice (orig-fun buffer &optional prefix menus)
+  "Advice for describe-buffer-bindings to correctly show C-d and C-e bindings.
+Does not give the correct result if you explicitly search for C-c or C-x."
   (let ((start-point (point)))
-    (apply orig-fun args)
-    (wakib--replace-describe-bindings-shortcuts start-point (point))))
+    (cond ((not prefix)
+	   ;; Without prefix must change C-c and C-x
+	   (apply orig-fun buffer prefix menus)
+	   (wakib--replace-in-region "^C-c " "C-d " start-point (point))
+	   (wakib--replace-in-region "^C-x " "C-e " start-point (point)))
+	  ;; Explicit search for C-d won't work if buffer passed isn't current buffer
+	  ((and (not (eq buffer (current-buffer)))(string-match-p "^C-d" (key-description prefix)))
+	   (apply orig-fun buffer
+		  (kbd (replace-regexp-in-string "^C-d" "C-c" (key-description prefix))) menus)
+	   (wakib--replace-in-region  "^C-c " "C-d " start-point (point)))
+	  (t
+	   (apply orig-fun buffer prefix menus)))))
 
+
+    
 ;; Commands
 
 (defun wakib-previous (&optional arg)

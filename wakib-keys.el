@@ -482,6 +482,15 @@ Then add C-d and C-e to KEYMAP"
 	     `((wakib-keys . ,wakib-keys-overriding-map)))
 
 
+(defun wakib--setup ()
+  "Runs after minor mode change to setup minor mode"
+  (if wakib-keys
+      (progn
+	(advice-add 'substitute-command-keys :around #'wakib-substitute-command-keys)
+	(advice-add 'describe-buffer-bindings :around #'wakib--describe-bindings-advice))
+    (advice-remove 'substitute-command-keys #'wakib-substitute-command-keys)
+    (advice-remove 'describe-buffer-bindings #'wakib--describe-bindings-advice)))
+
 ;;;###autoload
 (define-minor-mode wakib-keys
   "This mode brings modern style keybindings to Emacs.
@@ -495,7 +504,8 @@ Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :init-value nil
   :keymap wakib-keys-map
   :require 'wakib-keys
-  :global t)
+  :global t
+  (wakib--setup))
 
 (provide 'wakib-keys)
 

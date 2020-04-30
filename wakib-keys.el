@@ -444,6 +444,7 @@ Then add C-d and C-e to KEYMAP"
     ("C-r" . query-replace)
     ("C-S-r" . query-replace-regexp)
     ("C-s" . save-buffer)
+    ("C-S-s" . write-file)
     ("C-p" . print-buffer)
     ("C-a" . mark-whole-buffer)
     ("C-+" . text-scale-increase)

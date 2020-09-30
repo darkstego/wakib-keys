@@ -484,17 +484,21 @@ Then add C-d and C-e to KEYMAP"
 
 (defun wakib--tty-M-O (&optional arg)
   "Fix tty M-O to enable arrow keys"
-  (when (and
-         (> (length (this-single-command-keys)) 0)
-	 (sit-for 0.01))
-    ;; cancel out of Esc prefix
-    (setq unread-command-events (listify-key-sequence "\C-g"))
-    (move-end-of-line arg)))
+  (interactive)
+  (let ((key (read-char nil nil 0.01)))
+    (if key
+	;; temporary-goal-column needs to be reset otherwise
+	;; up and down arrows end moving to old column
+	(cond ((eq key 65) (setq temporary-goal-column 0)
+	       (previous-line arg))
+	      ((eq key 66) (setq temporary-goal-column 0)
+	       (next-line arg))
+	      ((eq key 67) (right-char arg))
+	      ((eq key 68) (left-char arg)))
+      (move-end-of-line arg))))
 
 (unless (display-graphic-p)
-  ;; must be menu-item form so sit-for trigger esc prefix
-  (define-key wakib-keys-overriding-map (kbd "M-O")
-  `(menu-item "" nil :filter ,#'wakib--tty-M-O)))
+  (define-key wakib-keys-overriding-map (kbd "M-O") 'wakib--tty-M-O))
 
 
 (defun wakib--setup ()

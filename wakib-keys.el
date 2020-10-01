@@ -489,12 +489,12 @@ Then add C-d and C-e to KEYMAP"
     (if key
 	;; temporary-goal-column needs to be reset otherwise
 	;; up and down arrows end moving to old column
-	(cond ((eq key 65) (setq temporary-goal-column 0)
-	       (previous-line arg))
-	      ((eq key 66) (setq temporary-goal-column 0)
-	       (next-line arg))
-	      ((eq key 67) (right-char arg))
-	      ((eq key 68) (left-char arg)))
+	(cond ((eq key 65) (previous-line arg))
+	      ((eq key 66) (next-line arg))
+	      ((eq key 67) (right-char arg)
+	       (setq temporary-goal-column 0))
+	      ((eq key 68) (left-char arg)
+	       (setq temporary-goal-column 0)))
       (move-end-of-line arg))))
 
 (unless (display-graphic-p)

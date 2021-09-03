@@ -97,13 +97,17 @@ KEY"
   ;; Put replacements in hash first because doing key lookup during
   ;; replace-regexp-in-string resets the match and causes the replace
   ;; step to work incorrectly
+
+  ;; Parts of emacs (e.g. Customize) calls with nil args
+  (if (stringp (car args))
   (let* ((hash (wakib--get-command-keys (make-hash-table) (car args) 0))
 	(str (replace-regexp-in-string "\\\\\\[\\([^\]]*\\)\\]"
 				       (lambda (match)
 					 (let ((key (gethash (intern (substring match 2 -1)) hash)))
 					   (if key key match)))
 				       (car args) t t)))
-    (apply orig-fun (list str))))
+    (apply orig-fun (list str)))
+  (apply orig-fun args)))
 
 
 (defun wakib-update-major-mode-map ()

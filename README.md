@@ -130,6 +130,16 @@ anywhere in your emacs loadpath then place
 ```
 in your init.el file
 
+## Removing Unwanted Shortcuts
+
+If there is a shortcut you would want to disable it can be achieved by removing it from the `wakib-keys-overriding-map`. 
+
+E.g. if you want to remove the "C-q" binding just add the following to your init.el after requiring wakib-keys. Replace "C-q" with whatever key you wish to remove.
+
+```
+(define-key wakib-keys-overriding-map (kbd "C-q") nil)
+```
+
 ## Contribution
 
 If you have any issues, suggestions then please post them on the

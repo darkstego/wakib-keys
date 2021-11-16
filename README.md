@@ -4,6 +4,10 @@ Emacs minor mode that provides a modern, efficient and easy
 to learn keybindings. For the full starter kit that is based
 on the concepts found here, please check out [wakib-emacs](https://github.com/darkstego/wakib-emacs).
 
+## Changelog
+
+* Move to beginning of line now stops at first Non-Whitespace, press again for beginning of line
+
 ## Features
 
 ### Proper Prefix Key Remapping

@@ -422,7 +422,7 @@ Then add C-d and C-e to KEYMAP"
     ("M-o" . forward-word)
     ("M-;" . wakib-next)
     ("M-:" . wakib-previous)
-    ("M-U" . move-beginning-of-line)
+    ("M-U" . wakib-back-to-indentation-or-beginning)
     ("M-O" . move-end-of-line)
     ("M-J" . backward-paragraph)
     ("M-L" . forward-paragraph)

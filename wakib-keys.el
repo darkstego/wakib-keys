@@ -480,10 +480,10 @@ Then add C-d and C-e to KEYMAP"
   "List of all wakib mode keybindings.")
 
 (defun wakib--add-dynamic-keybindings ()
-  (when mouse-wheel-down-event
+  (when (boundp 'mouse-wheel-down-event)
 	 (define-key wakib-keys-overriding-map
 		(concat "<C-" (symbol-name mouse-wheel-down-event)  ">") `text-scale-increase))
-  (when mouse-wheel-up-event
+  (when (boundp 'mouse-wheel-up-event)
 	 (define-key wakib-keys-overriding-map
 		(concat "<C-" (symbol-name mouse-wheel-up-event)  ">") `text-scale-decrease)))
 

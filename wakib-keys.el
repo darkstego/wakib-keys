@@ -479,16 +479,8 @@ Then add C-d and C-e to KEYMAP"
     ("<escape>" . keyboard-quit)) ;; should quit minibuffer
   "List of all wakib mode keybindings.")
 
-(defun wakib--add-dynamic-keybindings ()
-  (when (boundp 'mouse-wheel-down-event)
-	 (define-key wakib-keys-overriding-map
-		(concat "<C-" (symbol-name mouse-wheel-down-event)  ">") `text-scale-increase))
-  (when (boundp 'mouse-wheel-up-event)
-	 (define-key wakib-keys-overriding-map
-		(concat "<C-" (symbol-name mouse-wheel-up-event)  ">") `text-scale-decrease)))
 
 (wakib-define-keys wakib-keys-overriding-map wakib-keylist)
-(wakib--add-dynamic-keybindings)
 (add-to-list 'emulation-mode-map-alists
 	     `((wakib-keys . ,wakib-keys-overriding-map)))
 

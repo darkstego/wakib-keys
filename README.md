@@ -1,4 +1,4 @@
-# Wakib-keys
+<h2 align="center"><img src="https://user-images.githubusercontent.com/2610287/236253542-ab75c56d-0bbc-457a-8587-d5d2c78d0eb3.svg" height="128"><br>Wakib Keys</h2>
 
 Emacs minor mode that provides a modern, efficient and easy
 to learn keybindings. For the full starter kit that is based

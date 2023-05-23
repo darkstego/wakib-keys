@@ -1,8 +1,9 @@
 <h2 align="center"><img src="https://user-images.githubusercontent.com/2610287/236253542-ab75c56d-0bbc-457a-8587-d5d2c78d0eb3.svg" height="128"><br>Wakib Keys</h2>
 
 Emacs minor mode that provides a modern, efficient and easy
-to learn keybindings. For the full starter kit that is based
+to learn keybindings. For the full Emacs starter kit that is based
 on the concepts found here, please check out [wakib-emacs](https://github.com/darkstego/wakib-emacs).
+If you like these keybindings checkout the [Wakib project](https://github.com/darkstego/wakib-project) to use these bindings outside of Emacs.
 
 ## Changelog
 

@@ -107,7 +107,7 @@ This is just the start, I hope to expand on it very soon
 | Ctrl + -        | Decrease Font Size |
 | Alt + 4         | Split Window Right |
 | Alt + Shift + 4 | Split Window Below |
-| Alt + S         | Switch Window      |
+| Alt + H         | Switch Window      |
 | Ctrl + B        | Swith to Buffer    |
 | Alt + Shift + 3 | Close Pane         |
 | Alt + 3         | Close Other Panes  |

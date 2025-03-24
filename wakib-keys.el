@@ -29,7 +29,7 @@
 
 ;; This package aims to provide new keybindinfgs for basic Emacs
 ;; functions.  The goal of this package is to provide an accesible
-;; emacs starter kit that could be used by anyone out of the box
+;; Emacs starter kit that could be used by anyone out of the box
 ;; without the need for tutorials, but also be feature complete.
 
 ;;; Code:
@@ -204,7 +204,7 @@ Optional argument PREFIX adds prefix to command."
 
 
 (defun wakib--replace-in-region (regex rep start-point end-point)
-  "Go through the output of describe bindings and replace C-c and C-x with C-d and C-e"
+  "Replace C-c and C-x with C-d and C-e in `describe-bindings'."
   (save-excursion
     (goto-char start-point)
     (while (re-search-forward regex end-point t)
@@ -228,7 +228,7 @@ Does not give the correct result if you explicitly search for C-c or C-x."
 	   (apply orig-fun buffer prefix menus)))))
 
 
-    
+
 ;; Commands
 
 (defun wakib-previous (&optional arg)
@@ -252,12 +252,12 @@ ARG used as repeat for interactive function."
 	 (exchange-point-and-mark))
 	(t (wakib-next-more))))
 
-(defun wakib-previous-more (&optional arg)
-  "Used to add functionality to wakib-previous"
+(defun wakib-previous-more (&optional _arg)
+  "Used to add functionality to `wakib-previous'."
   (interactive "p"))
 
-(defun wakib-next-more (&optional arg)
-  "Used to add fucntionality to wakib-next"
+(defun wakib-next-more (&optional _arg)
+  "Used to add fucntionality to `wakib-next'."
   (interactive "p"))
 
 
@@ -485,14 +485,14 @@ Then add C-d and C-e to KEYMAP"
 	     `((wakib-keys . ,wakib-keys-overriding-map)))
 
 (defun wakib--tty-M-O (&optional arg)
-  "Fix tty M-O to enable arrow keys"
+  "Fix tty M-O to enable arrow keys."
   (interactive)
   (let ((key (read-char nil nil 0.01)))
     (if key
 	;; temporary-goal-column needs to be reset otherwise
 	;; up and down arrows end moving to old column
-	(cond ((eq key 65) (previous-line arg))
-	      ((eq key 66) (next-line arg))
+	(cond ((eq key 65) (forward-line (- arg)))
+	      ((eq key 66) (forward-line (+ arg)))
 	      ((eq key 67) (right-char arg)
 	       (setq temporary-goal-column 0))
 	      ((eq key 68) (left-char arg)
@@ -526,6 +526,7 @@ Note that only the first prefix is changed. So C-c C-c becomes C-d C-c."
   :keymap wakib-keys-map
   :require 'wakib-keys
   :global t
+  :group 'wakib-keys
   (wakib--setup))
 
 (provide 'wakib-keys)

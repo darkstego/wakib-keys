@@ -260,7 +260,19 @@ ARG used as repeat for interactive function."
   "Used to add fucntionality to wakib-next"
   (interactive "p"))
 
-
+(defun wakib-keyboard-quit ()
+  "Quit the current command/process."
+  (interactive)
+  (cond
+   ((region-active-p)
+    (setq saved-region-selection nil)
+    (let (select-active-regions)
+      (deactivate-mark)))
+   ((> (minibuffer-depth) 0)
+    (abort-recursive-edit))
+   ((> (recursion-depth) 0)
+    (exit-recursive-edit))
+   (t (keyboard-quit))))
 
 ;; might be a more functional way to do this
 (defun wakib-select-line-block-all ()
@@ -476,7 +488,7 @@ Then add C-d and C-e to KEYMAP"
     ("<C-S-return>" . wakib-insert-line-before)
     ("C-b" . switch-to-buffer)
     ("M-X" . pp-eval-expression)
-    ("<escape>" . keyboard-quit)) ;; should quit minibuffer
+    ("<escape>" . wakib-keyboard-quit)) ;; should quit minibuffer
   "List of all wakib mode keybindings.")
 
 

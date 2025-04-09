@@ -261,18 +261,10 @@ ARG used as repeat for interactive function."
   (interactive "p"))
 
 (defun wakib-keyboard-quit ()
-  "Quit the current command/process."
+  "Quit the current command/process.
+Like `C-g' but intended to be used for other keybindings"
   (interactive)
-  (cond
-   ((region-active-p)
-    (setq saved-region-selection nil)
-    (let (select-active-regions)
-      (deactivate-mark)))
-   ((> (minibuffer-depth) 0)
-    (abort-recursive-edit))
-   ((> (recursion-depth) 0)
-    (exit-recursive-edit))
-   (t (keyboard-quit))))
+  (call-interactively (key-binding "\C-g")))
 
 ;; might be a more functional way to do this
 (defun wakib-select-line-block-all ()

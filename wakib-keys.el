@@ -507,6 +507,8 @@ Then add C-d and C-e to KEYMAP"
       (move-end-of-line arg))))
 
 (defvar wakib--keymaps-initialized nil)
+(defvar wakib--keymap-alist
+  `((wakib-keys . ,wakib-keys-overriding-map)))
 
 (defun wakib--setup ()
   "Runs after minor mode change to setup minor mode"
@@ -520,10 +522,8 @@ Then add C-d and C-e to KEYMAP"
       (progn
         (advice-add 'substitute-command-keys :around #'wakib-substitute-command-keys)
         (advice-add 'describe-buffer-bindings :around #'wakib--describe-bindings-advice)
-        (add-to-ordered-list 'emulation-mode-map-alists
-                             `((wakib-keys . ,wakib-keys-overriding-map)) 400))
-    (setq emulation-mode-map-alists (delq `((wakib-keys . ,wakib-keys-overriding-map))
-                                          emulation-mode-map-alists))
+        (add-to-ordered-list 'emulation-mode-map-alists 'wakib--keymap-alist 400))
+    (setq emulation-mode-map-alists (delq 'wakib--keymap-alist emulation-mode-map-alists))
     (advice-remove 'substitute-command-keys #'wakib-substitute-command-keys)
     (advice-remove 'describe-buffer-bindings #'wakib--describe-bindings-advice)))
 

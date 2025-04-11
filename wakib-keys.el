@@ -506,18 +506,24 @@ Then add C-d and C-e to KEYMAP"
 	       (setq temporary-goal-column 0)))
       (move-end-of-line arg))))
 
+(defvar wakib--keymaps-initialized nil)
+
 (defun wakib--setup ()
   "Runs after minor mode change to setup minor mode"
+  (unless wakib--keymaps-initialized
+    (wakib-define-keys wakib-keys-overriding-map wakib-keylist)
+    (unless (display-graphic-p)
+      (define-key wakib-keys-overriding-map (kbd "M-O") 'wakib--tty-M-O))
+    (setq wakib--keymaps-initialized t))
+
   (if wakib-keys
       (progn
         (advice-add 'substitute-command-keys :around #'wakib-substitute-command-keys)
-	(advice-add 'describe-buffer-bindings :around #'wakib--describe-bindings-advice)
-        (wakib-define-keys wakib-keys-overriding-map wakib-keylist)
-        (unless (display-graphic-p)
-          (define-key wakib-keys-overriding-map (kbd "M-O") 'wakib--tty-M-O))
+        (advice-add 'describe-buffer-bindings :around #'wakib--describe-bindings-advice)
         (add-to-ordered-list 'emulation-mode-map-alists
                              `((wakib-keys . ,wakib-keys-overriding-map)) 400))
-    (setq emulation-mode-map-alists (delq 'wakib-keys-overriding-map emulation-mode-map-alists))
+    (setq emulation-mode-map-alists (delq `((wakib-keys . ,wakib-keys-overriding-map))
+                                          emulation-mode-map-alists))
     (advice-remove 'substitute-command-keys #'wakib-substitute-command-keys)
     (advice-remove 'describe-buffer-bindings #'wakib--describe-bindings-advice)))
 

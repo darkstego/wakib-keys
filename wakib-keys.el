@@ -326,34 +326,6 @@ ARG used as repeat for interactive function."
   (if (= (point) (progn (back-to-indentation) (point)))
       (beginning-of-line)))
 
-
-(defun wakib-beginning-line-or-block ()
-  "Move to the beginning of line, if there then move to beginning of block."
-  (interactive)
-  (let ((p (point)))
-	 (beginning-of-line)
-	 (when (eq p (point))
-		(when (re-search-backward "\n[ \t]*\n" nil "move")
-		  (re-search-forward "\n[ \t]*\n")))
-	 (when (eq p (point))
-		(re-search-backward "\n[ \t]*\n" nil "move")
-		(when (re-search-backward "\n[ \t]*\n" nil "move")
-		  (re-search-forward "\n[ \t]*\n")))))
-
-(defun wakib-end-line-or-block ()
-  "Move to the end of line, if there then move to end of block."
-  (interactive)
-  (let ((p (point)))
-	 (end-of-line)
-	 (when (eq p (point))
-		(when (re-search-forward "\n[ \t]*\n" nil "move")
-		  (re-search-backward "\n[ \t]*\n")))
-	 (when (eq p (point))
-		(re-search-forward "\n[ \t]*\n" nil "move")
-		(when (re-search-forward "\n[ \t]*\n" nil "move")
-		  (re-search-backward "\n[ \t]*\n")))))
-
-
 (defun wakib-new-empty-buffer ()
   "Create a new empty buffer and switch to it.
 New buffer will be named “untitled” or “untitled<2>”, etc.
@@ -378,32 +350,6 @@ It returns the buffer."
   (interactive)
   (move-end-of-line 1)
   (newline-and-indent))
-
-(defun wakib-beginning-of-line-or-block ()
-  "Move cursor to beginning of line or previous paragraph."
-  (interactive)
-  (let (($p (point)))
-    (if (or (equal (point) (line-beginning-position))
-            (equal last-command this-command ))
-        (if (re-search-backward "\n[\t\n ]*\n+" nil "move")
-            (progn
-              (skip-chars-backward "\n\t ")
-              ;; (forward-char )
-              )
-          (goto-char (point-min)))
-      (progn
-        (back-to-indentation)
-        (when (eq $p (point))
-          (beginning-of-line))))))
-
-(defun wakib-end-of-line-or-block ()
-  "Move cursor to end of line or next paragraph."
-  (interactive)
-  (if (or (equal (point) (line-end-position))
-          (equal last-command this-command ))
-      (progn
-        (re-search-forward "\n[\t\n ]*\n+" nil "move" ))
-    (end-of-line)))
 
 (defun wakib-backward-kill-line ()
   "Kill from cursor to start of line."

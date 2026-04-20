@@ -253,11 +253,15 @@ ARG used as repeat for interactive function."
 	(t (wakib-next-more))))
 
 (defun wakib-previous-more (&optional _arg)
-  "Used to add functionality to `wakib-previous'."
+  "Extension hook invoked by `wakib-previous' when no region/yank is active.
+Redefine this function in user config to add mode-specific behavior
+\(e.g. navigating flyspell overlays).  The default is a no-op."
   (interactive "p"))
 
 (defun wakib-next-more (&optional _arg)
-  "Used to add fucntionality to `wakib-next'."
+  "Extension hook invoked by `wakib-next' when no region/yank is active.
+Redefine this function in user config to add mode-specific behavior
+\(e.g. navigating flyspell overlays).  The default is a no-op."
   (interactive "p"))
 
 (defun wakib-keyboard-quit ()

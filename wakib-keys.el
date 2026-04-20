@@ -34,6 +34,11 @@
 
 ;;; Code:
 
+(defgroup wakib-keys nil
+  "Modern, CUA-style keybindings for Emacs."
+  :group 'convenience
+  :prefix "wakib-")
+
 
 ;; Functions & Macros
 

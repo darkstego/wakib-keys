@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  byte-compile:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        emacs_version: ['27.1', '28.2', '29.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: purcell/setup-emacs@master
+        with:
+          version: ${{ matrix.emacs_version }}
+      - name: Byte-compile
+        run: |
+          emacs -Q --batch \
+            --eval "(setq byte-compile-error-on-warn t)" \
+            -f batch-byte-compile wakib-keys.el

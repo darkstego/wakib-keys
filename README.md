@@ -1,5 +1,9 @@
 <h2 align="center"><img src="https://user-images.githubusercontent.com/2610287/236253542-ab75c56d-0bbc-457a-8587-d5d2c78d0eb3.svg" height="128"><br>Wakib Keys</h2>
 
+<p align="center">
+  <a href="https://github.com/darkstego/wakib-keys/actions/workflows/ci.yml"><img src="https://github.com/darkstego/wakib-keys/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+</p>
+
 Emacs minor mode that provides a modern, efficient and easy
 to learn keybindings. For the full Emacs starter kit that is based
 on the concepts found here, please check out [wakib-emacs](https://github.com/darkstego/wakib-emacs).

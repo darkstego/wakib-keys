@@ -27,8 +27,8 @@
 
 ;;; Commentary:
 
-;; This package aims to provide new keybindinfgs for basic Emacs
-;; functions.  The goal of this package is to provide an accesible
+;; This package aims to provide new keybindings for basic Emacs
+;; functions.  The goal of this package is to provide an accessible
 ;; Emacs starter kit that could be used by anyone out of the box
 ;; without the need for tutorials, but also be feature complete.
 
@@ -50,9 +50,8 @@ definition.  This idea came from general.el"
 		 (wakib-key-binding key))))
 
 
-;; should probably use let instead of double call to (car x)
 (defun wakib-minor-mode-key-binding (key)
-  "Function return all keymaps defind to KEY within minor modes.
+  "Function return all keymaps defined to KEY within minor modes.
 This function ignores the overriding maps that will be used to override
 KEY"
   (let ((active-maps nil))
@@ -279,7 +278,6 @@ Redefine this function in user config to add mode-specific behavior
     (exit-recursive-edit))
    (t (keyboard-quit))))
 
-;; might be a more functional way to do this
 (defun wakib-select-line-block-all ()
   "Select line.  Expands to block and then entire buffer."
   (interactive)
@@ -289,41 +287,41 @@ Redefine this function in user config to add mode-specific behavior
 	(p2 (if (region-active-p)
 		(region-end)
 	      (point)))
-		  (x1)
-		  (x2)
-		  (end-p))
-	 (unless (region-active-p)
-		(setq p1 (point))
-		(setq p2 (point)))
-	 (setq end-p (eq p2 (point)))
-	 (goto-char p1)
-	 (beginning-of-line)
-	 (setq x1 (point))
-	 (push-mark x1 t t)
-	 (goto-char p2)
-	 (end-of-line)
-	 (setq x2 (point))
-	 (when (and (eq x1 p1)
-		    (eq x2 p2))
-	   (goto-char p1)
-	   (when (re-search-backward "\n[ \t]*\n" nil "move")
-	     (re-search-forward "\n[ \t]*\n"))
-	   (setq x1 (point))
-	   (push-mark x1 t t)
-	   (goto-char p2)
-	   (when (re-search-forward "\n[ \t]*\n" nil "move")
-	     (re-search-backward "\n[ \t]*\n"))
-	   (setq x2 (point)))
-	 (when (and (eq x1 p1)
-		    (eq x2 p2))
-	   (goto-char (point-min))
-	   (setq x1 (point))
-	   (push-mark x1 t t)
-	   (goto-char (point-max))
-	   (setq x2 (point)))
-	 (when (not end-p)
-	   (push-mark x2 t t)
-	   (goto-char x1))))
+	(x1)
+	(x2)
+	(end-p))
+    (unless (region-active-p)
+      (setq p1 (point))
+      (setq p2 (point)))
+    (setq end-p (eq p2 (point)))
+    (goto-char p1)
+    (beginning-of-line)
+    (setq x1 (point))
+    (push-mark x1 t t)
+    (goto-char p2)
+    (end-of-line)
+    (setq x2 (point))
+    (when (and (eq x1 p1)
+	       (eq x2 p2))
+      (goto-char p1)
+      (when (re-search-backward "\n[ \t]*\n" nil "move")
+	(re-search-forward "\n[ \t]*\n"))
+      (setq x1 (point))
+      (push-mark x1 t t)
+      (goto-char p2)
+      (when (re-search-forward "\n[ \t]*\n" nil "move")
+	(re-search-backward "\n[ \t]*\n"))
+      (setq x2 (point)))
+    (when (and (eq x1 p1)
+	       (eq x2 p2))
+      (goto-char (point-min))
+      (setq x1 (point))
+      (push-mark x1 t t)
+      (goto-char (point-max))
+      (setq x2 (point)))
+    (when (not end-p)
+      (push-mark x2 t t)
+      (goto-char x1))))
 
 (defun wakib-back-to-indentation-or-beginning ()
   "Move to start of text or start of line."

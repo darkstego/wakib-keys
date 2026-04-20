@@ -108,7 +108,7 @@ This is just the start, I hope to expand on it very soon
 | Alt + 4         | Split Window Right |
 | Alt + Shift + 4 | Split Window Below |
 | Alt + H         | Switch Window      |
-| Ctrl + B        | Swith to Buffer    |
+| Ctrl + B        | Switch to Buffer   |
 | Alt + Shift + 3 | Close Pane         |
 | Alt + 3         | Close Other Panes  |
 
@@ -151,7 +151,7 @@ If you have any issues, suggestions then please post them on the
 project's github page. I would like to hear what is working and what
 isn't with these keybindings.
 
-## Other keybingings
+## Other keybindings
 
 Other projects that provide different keybindings for Emacs include
 

@@ -5,7 +5,7 @@
 ;; Created: 6 April 2018
 ;; Keywords: convenience, keybindings, keys
 ;; License: GPL v3
-;; Package-Requires: ((emacs "24.4"))
+;; Package-Requires: ((emacs "27.1"))
 ;; Version: 0.3.10
 
 ;; This file is not part of GNU Emacs.

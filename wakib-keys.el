@@ -265,7 +265,8 @@ ARG used as repeat for interactive function."
   (interactive)
   (cond
    ((region-active-p)
-    (setq saved-region-selection nil)
+    (when (boundp 'saved-region-selection)
+      (setq saved-region-selection nil))
     (let (select-active-regions)
       (deactivate-mark)))
    ((> (minibuffer-depth) 0)
@@ -460,6 +461,8 @@ Then add C-d and C-e to KEYMAP"
 (unless (display-graphic-p)
   (define-key wakib-keys-overriding-map (kbd "M-O") 'wakib--tty-M-O))
 
+
+(defvar wakib-keys)
 
 (defun wakib--setup ()
   "Runs after minor mode change to setup minor mode"

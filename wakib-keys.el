@@ -244,7 +244,7 @@ ARG used as repeat function for interactive"
 	 (yank-pop (- arg)))
 	((use-region-p)
 	 (exchange-point-and-mark))
-	(t (wakib-previous-more))))
+	(t (wakib-previous-more arg))))
 
 (defun wakib-next (&optional arg)
   "Perform context aware Next function.
@@ -254,7 +254,7 @@ ARG used as repeat for interactive function."
 	 (yank-pop arg))
 	((use-region-p)
 	 (exchange-point-and-mark))
-	(t (wakib-next-more))))
+	(t (wakib-next-more arg))))
 
 (defun wakib-previous-more (&optional _arg)
   "Extension hook invoked by `wakib-previous' when no region/yank is active.
@@ -452,13 +452,17 @@ Then add C-d and C-e to KEYMAP"
 
 (defun wakib--tty-M-O (&optional arg)
   "Fix tty M-O to enable arrow keys."
-  (interactive)
+  (interactive "p")
   (let ((key (read-char nil nil 0.01)))
     (if key
 	;; temporary-goal-column needs to be reset otherwise
 	;; up and down arrows end moving to old column
-	(cond ((eq key 65) (forward-line (- arg)))
-	      ((eq key 66) (forward-line (+ arg)))
+	;; this-command is set so mixing these with real <up>/<down>
+	;; keeps the goal column
+	(cond ((eq key 65) (setq this-command 'previous-line)
+	       (line-move (- arg)))
+	      ((eq key 66) (setq this-command 'next-line)
+	       (line-move arg))
 	      ((eq key 67) (right-char arg)
 	       (setq temporary-goal-column 0))
 	      ((eq key 68) (left-char arg)
